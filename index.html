@@ -485,11 +485,11 @@ img,svg{display:block;}
           </div>
           <div class="contact-card">
             <div class="ic" style="background:#FFF3D6;">🏠</div>
-            <div><h4>Adres</h4><p id="pub-address">Antakya, Hatay</p></div>
+            <div><h4>Adres</h4><p id="pub-address">Payas Çağlalık Tokiler, Hatay</p></div>
           </div>
           <div class="contact-card">
             <div class="ic" style="background:#FDE3F1;">⏰</div>
-            <div><h4>Çalışma Saatleri</h4><p id="pub-hours">Her gün 10:00 – 21:00</p></div>
+            <div><h4>Çalışma Saatleri</h4><p id="pub-hours">Her gün 10.00 - 22.00</p></div>
           </div>
           <div class="contact-card">
             <div class="ic" style="background:#E5F0FF;">🌐</div>
@@ -506,7 +506,7 @@ img,svg{display:block;}
           <div>
             <div style="font-size:2.4rem;">🗺️</div>
             <h3 style="margin-top:14px; font-size:1.2rem;">Bizi Haritada Bulun</h3>
-            <p style="margin-top:8px; opacity:0.85; font-size:0.92rem;" id="pub-address-2">Antakya, Hatay — ana caddeye 2 dakika yürüme mesafesinde.</p>
+            <p style="margin-top:8px; opacity:0.85; font-size:0.92rem;" id="pub-address-2">Payas Çağlalık Tokiler, Hatay.</p>
           </div>
         </div>
       </div>
@@ -546,7 +546,6 @@ img,svg{display:block;}
       </div>
       <button class="a-btn a-btn-primary" id="loginBtn">Giriş Yap</button>
       <div id="loginErrorBox"></div>
-      <div class="login-hint">Demo giriş bilgisi: <b>admin</b> / <b>vadi2026</b>. Ayarlar bölümünden değiştirebilirsiniz.</div>
       <a href="#home" class="back-to-site" id="backToSiteLink">← Tanıtım sitesine dön</a>
     </div>
   </div>
@@ -594,17 +593,18 @@ img,svg{display:block;}
 /* ===================== STORAGE HELPERS ===================== */
 async function dbGet(key, shared){
   try{
+    const localValue = window.localStorage.getItem(key);
+    if(localValue != null) return localValue;
+  }catch(e){
+    console.error('local storage get failed:', e);
+  }
+  try{
     if(window.storage && typeof window.storage.get === 'function'){
       const r = await window.storage.get(key, shared);
       if(r && r.value != null) return r.value;
     }
   }catch(e){ console.error('storage get failed:', e); }
-  try{
-    return window.localStorage.getItem(key);
-  }catch(e){
-    console.error('local storage get failed:', e);
-    return null;
-  }
+  return null;
 }
 async function dbSet(key, value, shared){
   let saved = false;
@@ -624,10 +624,10 @@ async function dbSet(key, value, shared){
 const DEFAULT_SETTINGS = {
   phone:'0543 544 31 72',
   whatsapp:'0543 544 31 72',
-  address:'Antakya, Hatay',
-  hours:'Her gün 10:00 – 21:00',
-  adminUser:'admin',
-  adminPass:'vadi2026'
+  address:'Payas Çağlalık Tokiler, Hatay',
+  hours:'Her gün 10.00 - 22.00',
+  adminUser:'Beyza Yıldırım',
+  adminPass:'Arel1645..'
 };
 
 let RECORDS = [];      // all check-in records (active + history)
