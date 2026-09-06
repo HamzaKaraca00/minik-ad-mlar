@@ -485,9 +485,7 @@ img,svg{display:block;}
           </div>
           <div class="contact-card">
             <div class="ic" style="background:#FFF3D6;">🏠</div>
-            <div><h4>Adres</h4><p id="pub-address">Payas Çağlalık Tokiler, Hatay</p>
-              <a href="https://www.google.com/maps/place/36%C2%B047'33.0%22N+36%C2%B014'36.8%22E/@36.7924907,36.2409723,17z" target="_blank" rel="noopener" style="display:inline-block; margin-top:6px; font-weight:800; font-size:0.85rem; color:var(--coral-dark);">📍 Yol Tarifi Al</a>
-            </div>
+            <div><h4>Adres</h4><p id="pub-address">Payas Çağlalık Tokiler, Hatay</p></div>
           </div>
           <div class="contact-card">
             <div class="ic" style="background:#FDE3F1;">⏰</div>
@@ -504,13 +502,12 @@ img,svg{display:block;}
             </div>
           </div>
         </div>
-        <div class="map-box" style="padding:0; min-height:0; height:520px; align-items:stretch; justify-content:stretch;">
-          <iframe
-            src="https://www.google.com/maps?q=36.7924907,36.2435472&z=16&output=embed"
-            width="100%" height="100%" style="border:0; display:block;" loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Minik Adımlar Oyun Evi Konumu"></iframe>
-          <div style="position:absolute; left:16px; bottom:16px; right:16px; background:rgba(43,34,80,0.85); backdrop-filter:blur(4px); color:#fff; padding:12px 18px; border-radius:16px; font-size:0.88rem; font-weight:700; text-align:left;" id="pub-address-2">📍 Payas Çağlalık Tokiler, Hatay.</div>
+        <div class="map-box">
+          <div>
+            <div style="font-size:2.4rem;">🗺️</div>
+            <h3 style="margin-top:14px; font-size:1.2rem;">Bizi Haritada Bulun</h3>
+            <p style="margin-top:8px; opacity:0.85; font-size:0.92rem;" id="pub-address-2">Payas Çağlalık Tokiler, Hatay.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -606,10 +603,7 @@ async function dbGet(key, shared){
       const r = await window.storage.get(key, shared);
       if(r && r.value != null) return r.value;
     }
-  }catch(e){
-    // Beklenen durum: bu anahtar için henüz hiç veri kaydedilmemiş.
-    // window.storage.get, olmayan anahtarlarda hata fırlatabiliyor; bu bir arıza değil.
-  }
+  }catch(e){ console.error('storage get failed:', e); }
   return null;
 }
 async function dbSet(key, value, shared){
