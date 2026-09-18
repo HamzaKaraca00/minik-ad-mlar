@@ -1410,8 +1410,8 @@ function renderDrinkSales(){
   </div>
   <div class="a-card">
     <h3>Son İçecek Satışları</h3>
-    ${rows.length ? `<div style="overflow-x:auto;"><table class="a-table"><thead><tr><th>Müşteri</th><th>İçecekler</th><th>Ödeme</th><th>Tutar</th><th>Tarih</th></tr></thead><tbody>
-      ${rows.map(s=>`<tr><td><b>İsimsiz satış</b></td><td>${s.items.map(i=>escapeHtml(i.name)+' ×'+i.qty).join(', ')}</td><td>${escapeHtml(s.paymentMethod)}</td><td><b>${s.total.toLocaleString('tr-TR')} ₺</b></td><td>${fmtDateTime(s.createdAt)}</td></tr>`).join('')}
+    ${rows.length ? `<div style="overflow-x:auto;"><table class="a-table"><thead><tr><th>İçecekler</th><th>Ödeme</th><th>Tutar</th><th>Tarih</th></tr></thead><tbody>
+      ${rows.map(s=>`<tr><td>${s.items.map(i=>escapeHtml(i.name)+' ×'+i.qty).join(', ')}</td><td>${escapeHtml(s.paymentMethod)}</td><td><b>${s.total.toLocaleString('tr-TR')} ₺</b></td><td>${fmtDateTime(s.createdAt)}</td></tr>`).join('')}
     </tbody></table></div>` : emptyState('🥤','Henüz içecek satışı bulunmuyor.')}
   </div>`;
 }
@@ -1916,6 +1916,11 @@ function renderSettings(){
     <button class="a-btn a-btn-primary" style="width:auto; margin-top:18px;" id="saveAuthBtn">Giriş Bilgilerini Güncelle</button>
   </div>
   <div class="a-card" style="max-width:640px;">
+    <h3>İçecek Satışlarını Temizleme</h3>
+    <p style="font-size:0.85rem; color:var(--a-text-soft); margin-bottom:14px;">Son içecek satışlarının tamamını silebilirsiniz. Bu işlem ciro kayıtlarından da kaldırır.</p>
+    <button class="a-btn" style="background:var(--a-red-soft); color:var(--a-red);" id="cleanupDrinkSalesBtn">Son İçecek Satışlarını Sil</button>
+  </div>
+  <div class="a-card" style="max-width:640px;">
     <h3>Kayıt Temizliği</h3>
     <p style="font-size:0.85rem; color:var(--a-text-soft); margin-bottom:14px;">Tamamlanmış (çıkışı yapılmış) eski kayıtları manuel olarak temizleyebilirsiniz. Şu anda içeride olan çocukların kayıtları asla silinmez.</p>
     <div class="form-grid">
@@ -1945,6 +1950,15 @@ function wireSettings(){
     if(p) SETTINGS.adminPass = p;
     await persistSettings();
     toast('Giriş bilgileri güncellendi.','🔒');
+  });
+  document.getElementById('cleanupDrinkSalesBtn').addEventListener('click', async function(){
+    if(!DRINK_SALES.length){ toast('Silinecek içecek satışı bulunmuyor.','⚠️'); return; }
+    if(!confirm('Tüm içecek satışları kalıcı olarak silinecek ve cirodan kaldırılacak. Onaylıyor musunuz?')) return;
+    const count = DRINK_SALES.length;
+    DRINK_SALES = [];
+    await persistDrinkSales();
+    toast(count+' içecek satışı silindi.','🧹');
+    renderView();
   });
 
   document.getElementById('cleanupOldBtn').addEventListener('click', async function(){
