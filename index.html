@@ -141,6 +141,24 @@ img,svg{display:block;}
 .g-tile{border-radius:20px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;}
 .g-tile svg{width:42%; height:42%; opacity:0.9;}
 
+/* Menu (Cafe) */
+.menu-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+.menu-card{background:#fff; border-radius:26px; padding:28px 26px; border:1px solid var(--line); transition:transform .2s, box-shadow .2s;}
+.menu-card:hover{transform:translateY(-4px); box-shadow:0 18px 32px -16px rgba(43,34,80,0.22);}
+.menu-card.wide{grid-column:1 / -1;}
+.menu-cat-badge{display:inline-flex; align-items:center; gap:8px; padding:9px 20px; border-radius:999px; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.05rem; color:#fff; margin-bottom:18px;}
+.menu-items{display:flex; flex-direction:column;}
+.menu-item{display:flex; justify-content:space-between; align-items:baseline; gap:14px; padding:10px 0; border-bottom:1px dashed var(--line);}
+.menu-item:last-child{border-bottom:none;}
+.menu-item-name{font-weight:700; color:var(--indigo); font-size:0.98rem;}
+.menu-item-note{font-size:0.78rem; color:var(--indigo-soft); font-weight:600; margin-left:4px;}
+.menu-item-price{font-family:'Baloo 2',sans-serif; font-weight:800; color:var(--coral-dark); font-size:1rem; white-space:nowrap; flex-shrink:0;}
+.menu-items-2col{display:grid; grid-template-columns:1fr 1fr; gap:0 34px;}
+@media (max-width:900px){
+  .menu-grid{grid-template-columns:1fr;}
+  .menu-items-2col{grid-template-columns:1fr;}
+}
+
 /* Contact */
 .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:start;}
 .contact-card{background:#fff; border-radius:22px; padding:26px; border:1px solid var(--line); display:flex; gap:16px; align-items:flex-start; margin-bottom:16px;}
@@ -277,6 +295,19 @@ img,svg{display:block;}
 .duration-pill.selected{background:var(--a-primary); border-color:var(--a-primary); color:#fff;}
 .calc-box{background:var(--a-primary-soft); border-radius:12px; padding:14px 16px; margin-top:16px; font-size:0.88rem; color:var(--a-primary); font-weight:700; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
 
+/* Drink selector (admin new registration) */
+.drink-cat-title{font-size:0.78rem; font-weight:800; color:var(--a-text-soft); margin:16px 0 8px; text-transform:uppercase; letter-spacing:0.03em;}
+.drink-cat-title:first-child{margin-top:6px;}
+.drink-row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 14px; border:1px solid var(--a-border); border-radius:12px; margin-bottom:8px; background:#fff;}
+.drink-info{display:flex; flex-direction:column; gap:2px;}
+.drink-name{font-weight:700; font-size:0.9rem; color:var(--a-text);}
+.drink-price{font-size:0.76rem; color:var(--a-text-soft); font-weight:600;}
+.drink-qty-ctrl{display:flex; align-items:center; gap:12px; flex-shrink:0;}
+.qty-btn{width:30px; height:30px; border-radius:8px; border:1.5px solid var(--a-border); background:var(--a-bg); font-weight:800; font-size:1rem; color:var(--a-text); line-height:1; display:flex; align-items:center; justify-content:center; padding:0;}
+.qty-btn:hover{background:var(--a-primary-soft); color:var(--a-primary); border-color:var(--a-primary);}
+.qty-val{min-width:20px; text-align:center; font-weight:800; font-size:0.95rem;}
+.drinks-total-box{background:var(--a-green-soft); color:var(--a-green); border-radius:12px; padding:14px 16px; margin-top:14px; font-weight:800; font-size:0.9rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+
 .search-row{display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap;}
 .search-row input,.search-row select{flex:1; min-width:160px;}
 
@@ -320,6 +351,7 @@ img,svg{display:block;}
         <a href="#home">Ana Sayfa</a>
         <a href="#about">Hakkımızda</a>
         <a href="#areas">Oyun Alanlarımız</a>
+        <a href="#menu">Kafe Menüsü</a>
         <a href="#gallery">Galeri</a>
         <a href="#contact">İletişim</a>
         <a href="#contact" class="p-nav-cta">İletişime Geçin</a>
@@ -445,6 +477,48 @@ img,svg{display:block;}
           <div class="area-body"><h4>Bebek &amp; Minik Köşesi</h4><p>0-3 yaş arası minikler için ayrılmış, sakin ve yumuşak oyun bölgesi.</p></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section" id="menu">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">☕ Kafe & Meşrubat Menüsü</span>
+        <h2>Siz Kahvenizi Yudumlarken, Onlar Eğlensin</h2>
+        <p>Çocuklar oyun alanında eğlenirken siz de kafemizde sıcak veya soğuk bir içeceğin, waffle ve milkshake'in tadını çıkarabilirsiniz.</p>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card">
+          <span class="menu-cat-badge" style="background:linear-gradient(135deg,#B9793F,#8A5A2B);">🔥 Sıcak İçecekler</span>
+          <div class="menu-items">
+            <div class="menu-item"><span class="menu-item-name">Türk Kahvesi</span><span class="menu-item-price">60 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Çay</span><span class="menu-item-price">10 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Espresso<span class="menu-item-note">(Sıcak / Soğuk)</span></span><span class="menu-item-price">75 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Latte</span><span class="menu-item-price">100 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Cappuccino<span class="menu-item-note">(Sıcak / Soğuk)</span></span><span class="menu-item-price">100 ₺</span></div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <span class="menu-cat-badge" style="background:linear-gradient(135deg,var(--turquoise),var(--turquoise-dark));">🧊 Soğuk İçecekler</span>
+          <div class="menu-items">
+            <div class="menu-item"><span class="menu-item-name">Su</span><span class="menu-item-price">10 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Soda</span><span class="menu-item-price">20 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Meyve Suyu</span><span class="menu-item-price">25 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Capri-Sun</span><span class="menu-item-price">25 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Link</span><span class="menu-item-price">25 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Kutu Kola</span><span class="menu-item-price">50 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Fuse Tea</span><span class="menu-item-price">50 ₺</span></div>
+          </div>
+        </div>
+        <div class="menu-card wide">
+          <span class="menu-cat-badge" style="background:linear-gradient(135deg,var(--bubblegum),#FF6BAE);">🧇 Tatlı &amp; Özel İçecekler</span>
+          <div class="menu-items menu-items-2col">
+            <div class="menu-item"><span class="menu-item-name">Waffle</span><span class="menu-item-price">175 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Milkshake<span class="menu-item-note">(Çikolata · Çilek · Muz)</span></span><span class="menu-item-price">150 ₺</span></div>
+          </div>
+        </div>
+      </div>
+      <p style="text-align:center; margin-top:28px; color:var(--indigo-soft); font-weight:700;">🎈 Çocuklar eğlenirken, siz de kahvenizin tadını çıkarın...</p>
     </div>
   </section>
 
@@ -636,11 +710,30 @@ const DEFAULT_SETTINGS = {
   adminPass:'Arel1645..'
 };
 
+/* Kafe / meşrubat menüsü — yeni kayıt formunda seçilip fiyata otomatik eklenir */
+const DRINKS_MENU = [
+  {id:'turk_kahve',  name:'Türk Kahvesi',                 price:60,  cat:'Sıcak İçecekler'},
+  {id:'cay',         name:'Çay',                           price:10,  cat:'Sıcak İçecekler'},
+  {id:'espresso',    name:'Espresso (Sıcak / Soğuk)',      price:75,  cat:'Sıcak İçecekler'},
+  {id:'latte',       name:'Latte',                         price:100, cat:'Sıcak İçecekler'},
+  {id:'cappuccino',  name:'Cappuccino (Sıcak / Soğuk)',    price:100, cat:'Sıcak İçecekler'},
+  {id:'su',          name:'Su',                            price:10,  cat:'Soğuk İçecekler'},
+  {id:'soda',        name:'Soda',                          price:20,  cat:'Soğuk İçecekler'},
+  {id:'meyve_suyu',  name:'Meyve Suyu',                    price:25,  cat:'Soğuk İçecekler'},
+  {id:'capri_sun',   name:'Capri-Sun',                     price:25,  cat:'Soğuk İçecekler'},
+  {id:'link',        name:'Link',                          price:25,  cat:'Soğuk İçecekler'},
+  {id:'kutu_kola',   name:'Kutu Kola',                      price:50,  cat:'Soğuk İçecekler'},
+  {id:'fuse_tea',    name:'Fuse Tea',                      price:50,  cat:'Soğuk İçecekler'},
+  {id:'waffle',      name:'Waffle',                        price:175, cat:'Tatlı & Özel İçecekler'},
+  {id:'milkshake',   name:'Milkshake (Çikolata / Çilek / Muz)', price:150, cat:'Tatlı & Özel İçecekler'}
+];
+
 let RECORDS = [];      // all check-in records (active + history)
 let SETTINGS = { ...DEFAULT_SETTINGS };
 let loggedIn = false;
 let currentView = 'dashboard';
 let selectedDurationMinutes = 120;
+let selectedDrinks = {}; // { drinkId: adet } — yeni kayıt formunda seçilen içecek/atıştırmalıklar
 
 /* ===================== INIT / LOAD ===================== */
 async function loadAll(){
@@ -1062,7 +1155,26 @@ function emptyState(icon,msg){ return `<div class="empty-state"><div class="ic">
 
 /* ===================== NEW REGISTRATION ===================== */
 const DURATIONS = [30,60,90,120,180];
+function renderDrinkRow(d){
+  const qty = selectedDrinks[d.id] || 0;
+  return `<div class="drink-row" data-drink="${d.id}">
+    <div class="drink-info"><span class="drink-name">${escapeHtml(d.name)}</span><span class="drink-price">${d.price} ₺ / adet</span></div>
+    <div class="drink-qty-ctrl">
+      <button type="button" class="qty-btn" data-act="minus" data-id="${d.id}">−</button>
+      <span class="qty-val" id="qtyval_${d.id}">${qty}</span>
+      <button type="button" class="qty-btn" data-act="plus" data-id="${d.id}">+</button>
+    </div>
+  </div>`;
+}
+function renderDrinkCategories(){
+  const cats = [...new Set(DRINKS_MENU.map(d=>d.cat))];
+  return cats.map(cat=>{
+    const items = DRINKS_MENU.filter(d=>d.cat===cat);
+    return `<div class="drink-cat-title">${cat}</div>${items.map(renderDrinkRow).join('')}`;
+  }).join('');
+}
 function renderNewForm(){
+  selectedDrinks = {};
   return `
   <div class="a-card" style="max-width:760px;">
     <h3>Yeni Çocuk Kaydı</h3>
@@ -1102,12 +1214,25 @@ function renderNewForm(){
       <span>Planlanan Çıkış: <b id="calcExit">—</b></span>
     </div>
 
+    <div class="form-section-title">İçecek &amp; Atıştırmalık Seçimi (Fiyata Otomatik Eklenir)</div>
+    <div id="drinksSelector">
+      ${renderDrinkCategories()}
+    </div>
+    <div class="drinks-total-box" id="drinksTotalBox">
+      <span>İçecek / Atıştırmalık Toplamı</span>
+      <span id="drinksTotalVal">0 ₺</span>
+    </div>
+
     <div class="form-section-title">Ödeme Bilgisi</div>
     <div class="form-grid">
-      <div class="field"><label>Alınan Tutar (₺)</label><input id="f_amount" type="number" min="0" step="10" placeholder="Örn: 250"></div>
+      <div class="field"><label>Oyun / Giriş Ücreti (₺)</label><input id="f_amount" type="number" min="0" step="10" placeholder="Örn: 250"></div>
       <div class="field"><label>Ödeme Yöntemi</label>
         <select id="f_payment"><option value="Nakit">Nakit</option><option value="Kart">Kart</option><option value="Ücretsiz">Ücretsiz</option></select>
       </div>
+    </div>
+    <div class="calc-box" id="grandTotalBox">
+      <span>Genel Toplam (Giriş Ücreti + İçecek/Atıştırmalık)</span>
+      <span id="grandTotalVal" style="font-family:'Baloo 2',sans-serif; font-size:1.05rem;">0 ₺</span>
     </div>
 
     <div style="margin-top:22px; display:flex; gap:10px;">
@@ -1140,6 +1265,20 @@ function wireNewForm(){
     selectedDurationMinutes = parseInt(this.value,10) || null;
     updateCalc();
   });
+  document.getElementById('drinksSelector').addEventListener('click', function(e){
+    const btn = e.target.closest('.qty-btn');
+    if(!btn) return;
+    const id = btn.dataset.id;
+    const cur = selectedDrinks[id] || 0;
+    const next = btn.dataset.act === 'plus' ? cur+1 : Math.max(0, cur-1);
+    if(next<=0) delete selectedDrinks[id]; else selectedDrinks[id] = next;
+    const qtyEl = document.getElementById('qtyval_'+id);
+    if(qtyEl) qtyEl.textContent = next;
+    updateGrandTotal();
+  });
+  const amountInput = document.getElementById('f_amount');
+  if(amountInput) amountInput.addEventListener('input', updateGrandTotal);
+  updateGrandTotal();
   document.getElementById('saveNewBtn').addEventListener('click', saveNewRecord);
 }
 function updateCalc(){
@@ -1150,6 +1289,20 @@ function updateCalc(){
   const exit = new Date(entry.getTime() + selectedDurationMinutes*60000);
   exitEl.textContent = fmtTime(exit);
 }
+function computeDrinksTotal(){
+  return Object.keys(selectedDrinks).reduce((sum,id)=>{
+    const d = DRINKS_MENU.find(x=>x.id===id);
+    return sum + (d ? d.price * selectedDrinks[id] : 0);
+  }, 0);
+}
+function updateGrandTotal(){
+  const drinksTotal = computeDrinksTotal();
+  const dtEl = document.getElementById('drinksTotalVal');
+  if(dtEl) dtEl.textContent = drinksTotal.toLocaleString('tr-TR')+' ₺';
+  const entryFee = parseFloat((document.getElementById('f_amount')||{}).value) || 0;
+  const gtEl = document.getElementById('grandTotalVal');
+  if(gtEl) gtEl.textContent = (entryFee+drinksTotal).toLocaleString('tr-TR')+' ₺';
+}
 async function saveNewRecord(){
   const first = document.getElementById('f_childFirst').value.trim();
   const last = document.getElementById('f_childLast').value.trim();
@@ -1159,6 +1312,13 @@ async function saveNewRecord(){
 
   const entryTime = new Date();
   const plannedExitTime = new Date(entryTime.getTime() + selectedDurationMinutes*60000);
+
+  const entryFee = parseFloat(document.getElementById('f_amount').value) || 0;
+  const drinksTotal = computeDrinksTotal();
+  const drinks = Object.keys(selectedDrinks).filter(id=>selectedDrinks[id]>0).map(id=>{
+    const d = DRINKS_MENU.find(x=>x.id===id);
+    return { name:d.name, qty:selectedDrinks[id], price:d.price, lineTotal:d.price*selectedDrinks[id] };
+  });
 
   const rec = {
     id: uid(),
@@ -1172,7 +1332,10 @@ async function saveNewRecord(){
     emergencyName: document.getElementById('f_emergencyName').value.trim(),
     emergencyPhone: document.getElementById('f_emergencyPhone').value.trim(),
     durationMinutes: selectedDurationMinutes,
-    amount: parseFloat(document.getElementById('f_amount').value) || 0,
+    entryFee: entryFee,
+    drinksTotal: drinksTotal,
+    drinks: drinks,
+    amount: entryFee + drinksTotal,
     paymentMethod: document.getElementById('f_payment').value || 'Nakit',
     entryTime: entryTime.toISOString(),
     plannedExitTime: plannedExitTime.toISOString(),
@@ -1186,6 +1349,7 @@ async function saveNewRecord(){
   const totalVisits = priorVisits + 1;
   toast(first+' için kayıt oluşturuldu ve giriş yapıldı.'+(priorVisits>0? ' Bu, '+totalVisits+'. ziyareti! 🌟':''),'🎉');
   selectedDurationMinutes = 120;
+  selectedDrinks = {};
   setView('active');
 }
 
@@ -1420,6 +1584,8 @@ function openDetail(id){
       <div class="detail-row"><span>Giriş Saati</span><span>${fmtDateTime(rec.entryTime)}</span></div>
       <div class="detail-row"><span>Planlanan Çıkış</span><span>${fmtTime(rec.plannedExitTime)} (${durLabel(rec.durationMinutes)})</span></div>
       <div class="detail-row"><span>Gerçek Çıkış</span><span>${rec.actualExitTime? fmtDateTime(rec.actualExitTime): '—'}</span></div>
+      ${rec.drinks && rec.drinks.length ? `<div class="detail-row"><span>İçecek / Atıştırmalık</span><span>${rec.drinks.map(d=>escapeHtml(d.name)+' ×'+d.qty).join(', ')}</span></div>` : ''}
+      <div class="detail-row"><span>Tutar</span><span><b>${(rec.amount||0).toLocaleString('tr-TR')} ₺</b>${rec.drinksTotal? ' <span style="color:var(--a-text-soft); font-weight:600;">(İçecek: '+rec.drinksTotal.toLocaleString('tr-TR')+' ₺ dahil)</span>':''}</span></div>
       ${rec.status==='içeride' ? '<div style="display:flex; gap:8px; margin-top:18px; flex-wrap:wrap;"><button class="a-btn a-btn-primary" style="margin-top:0;" id="modalExitBtn">Çıkış Yap</button><button class="a-btn" style="background:var(--a-yellow-soft); color:var(--a-yellow);" id="modalPauseBtn">'+(rec.paused?'▶️ Devam Et':'⏸️ Dondur')+'</button><button class="a-btn" style="background:var(--a-primary-soft); color:var(--a-primary);" id="modalAddTimeBtn">⏱️ Süre Ekle</button></div>' : ''}
       <h4 style="margin-top:22px; font-size:0.9rem; font-family:'Inter'; font-weight:800;">Geçmiş Ziyaretler (${visits.length})</h4>
       <div style="margin-top:10px;">
