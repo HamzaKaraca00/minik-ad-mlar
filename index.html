@@ -638,6 +638,7 @@ img,svg{display:block;}
         <button class="a-menu-item" data-view="records"><span class="ic">📋</span>Tüm Kayıtlar</button>
         <button class="a-menu-item" data-view="history"><span class="ic">🕓</span>Geçmiş İşlemler</button>
         <button class="a-menu-item" data-view="customers"><span class="ic">👨‍👩‍👧</span>Müşteriler</button>
+        <button class="a-menu-item" data-view="drinkSales"><span class="ic">🥤</span>İçecek Satış</button>
         <button class="a-menu-item" data-view="cashflow"><span class="ic">💰</span>Ciro</button>
         <button class="a-menu-item" data-view="stats"><span class="ic">📈</span>Raporlar</button>
         <button class="a-menu-item" data-view="settings"><span class="ic">⚙️</span>Ayarlar</button>
@@ -729,21 +730,26 @@ const DRINKS_MENU = [
 ];
 
 let RECORDS = [];      // all check-in records (active + history)
+let DRINK_SALES = [];  // child-play-area-independent drink sales
 let SETTINGS = { ...DEFAULT_SETTINGS };
 let loggedIn = false;
 let currentView = 'dashboard';
 let selectedDurationMinutes = 120;
 let selectedDrinks = {}; // { drinkId: adet } — yeni kayıt formunda seçilen içecek/atıştırmalıklar
+let selectedSaleDrinks = {};
 
 /* ===================== INIT / LOAD ===================== */
 async function loadAll(){
   const recRaw = await dbGet('zipzip:records', true);
   RECORDS = recRaw ? JSON.parse(recRaw) : [];
+  const salesRaw = await dbGet('zipzip:drink-sales', true);
+  DRINK_SALES = salesRaw ? JSON.parse(salesRaw) : [];
   const setRaw = await dbGet('zipzip:settings', true);
   SETTINGS = setRaw ? { ...DEFAULT_SETTINGS, ...JSON.parse(setRaw) } : { ...DEFAULT_SETTINGS };
   applyPublicSettings();
 }
 async function persistRecords(){ await dbSet('zipzip:records', JSON.stringify(RECORDS), true); }
+async function persistDrinkSales(){ await dbSet('zipzip:drink-sales', JSON.stringify(DRINK_SALES), true); }
 async function persistSettings(){ await dbSet('zipzip:settings', JSON.stringify(SETTINGS), true); }
 
 function applyPublicSettings(){
@@ -1063,7 +1069,7 @@ document.getElementById('sidebarToggle').addEventListener('click', function(){
 /* ===================== MENU / VIEW SWITCH ===================== */
 const VIEW_TITLES = {
   dashboard:'Dashboard', active:'Aktif Çocuklar', new:'Yeni Kayıt', records:'Tüm Kayıtlar',
-  history:'Geçmiş İşlemler', customers:'Müşteriler', cashflow:'Ciro', stats:'Raporlar', settings:'Ayarlar'
+  history:'Geçmiş İşlemler', customers:'Müşteriler', drinkSales:'İçecek Satış', cashflow:'Ciro', stats:'Raporlar', settings:'Ayarlar'
 };
 document.getElementById('adminMenu').addEventListener('click', function(e){
   const btn = e.target.closest('.a-menu-item');
@@ -1088,6 +1094,7 @@ function renderView(){
   else if(currentView==='records') { c.innerHTML = renderRecords(); wireSearchable('records'); }
   else if(currentView==='history') { c.innerHTML = renderHistory(); wireSearchable('history'); }
   else if(currentView==='customers') { c.innerHTML = renderCustomers(); wireSearchable('customers'); }
+  else if(currentView==='drinkSales') { c.innerHTML = renderDrinkSales(); wireDrinkSales(); }
   else if(currentView==='cashflow') { c.innerHTML = renderCashflow(); wireCashflow(); }
   else if(currentView==='stats') { c.innerHTML = renderStats(); wireStats(); }
   else if(currentView==='settings') { c.innerHTML = renderSettings(); wireSettings(); }
@@ -1351,6 +1358,100 @@ async function saveNewRecord(){
   selectedDurationMinutes = 120;
   selectedDrinks = {};
   setView('active');
+}
+
+/* ===================== İÇECEK SATIŞ ===================== */
+function renderSaleDrinkRow(d){
+  const qty = selectedSaleDrinks[d.id] || 0;
+  return `<div class="drink-row" data-drink="${d.id}">
+    <div class="drink-info"><span class="drink-name">${escapeHtml(d.name)}</span><span class="drink-price">${d.price} ₺ / adet</span></div>
+    <div class="drink-qty-ctrl">
+      <button type="button" class="qty-btn" data-act="minus" data-id="${d.id}">−</button>
+      <span class="qty-val" id="sale_qtyval_${d.id}">${qty}</span>
+      <button type="button" class="qty-btn" data-act="plus" data-id="${d.id}">+</button>
+    </div>
+  </div>`;
+}
+function renderSaleDrinkCategories(){
+  const cats = [...new Set(DRINKS_MENU.map(d=>d.cat))];
+  return cats.map(cat=>{
+    const items = DRINKS_MENU.filter(d=>d.cat===cat);
+    return `<div class="drink-cat-title">${cat}</div>${items.map(renderSaleDrinkRow).join('')}`;
+  }).join('');
+}
+function computeSaleDrinksTotal(){
+  return Object.keys(selectedSaleDrinks).reduce((sum,id)=>{
+    const d = DRINKS_MENU.find(x=>x.id===id);
+    return sum + (d ? d.price * selectedSaleDrinks[id] : 0);
+  }, 0);
+}
+function renderDrinkSales(){
+  selectedSaleDrinks = {};
+  const today = new Date(); today.setHours(0,0,0,0);
+  const todaySales = DRINK_SALES.filter(s=>new Date(s.createdAt)>=today);
+  const todayTotal = todaySales.reduce((sum,s)=>sum+s.total,0);
+  const rows = [...DRINK_SALES].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,20);
+  return `
+  <div class="a-card" style="max-width:760px;">
+    <h3>Çocuk Eğlence Hizmeti Almayan Müşteri İçin İçecek Satışı</h3>
+    <p style="font-size:0.85rem; color:var(--a-text-soft); margin-bottom:18px;">Müşterinin adını ve soyadını alın, istediği içecekleri seçin.</p>
+    <div class="form-grid">
+      <div class="field"><label>Müşteri Adı *</label><input id="sale_customerFirst" type="text" placeholder="Örn: Ayşe"></div>
+      <div class="field"><label>Müşteri Soyadı *</label><input id="sale_customerLast" type="text" placeholder="Örn: Yılmaz"></div>
+    </div>
+    <div class="form-section-title">İçecekler</div>
+    <div id="saleDrinksSelector">${renderSaleDrinkCategories()}</div>
+    <div class="drinks-total-box">
+      <span>Toplam Tutar</span><span id="saleTotalVal">0 ₺</span>
+    </div>
+    <div class="form-grid" style="margin-top:16px;">
+      <div class="field"><label>Ödeme Yöntemi</label><select id="sale_payment"><option value="Nakit">Nakit</option><option value="Kart">Kart</option></select></div>
+    </div>
+    <button class="a-btn a-btn-primary" style="width:auto; margin-top:18px;" id="saveDrinkSaleBtn">İçecek Satışını Kaydet</button>
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:1fr; max-width:240px;">
+    <div class="kpi-card good"><div class="kpi-label">Bugünkü İçecek Satışı</div><div class="kpi-value">${todayTotal.toLocaleString('tr-TR')} ₺</div></div>
+  </div>
+  <div class="a-card">
+    <h3>Son İçecek Satışları</h3>
+    ${rows.length ? `<div style="overflow-x:auto;"><table class="a-table"><thead><tr><th>Müşteri</th><th>İçecekler</th><th>Ödeme</th><th>Tutar</th><th>Tarih</th></tr></thead><tbody>
+      ${rows.map(s=>`<tr><td><b>${escapeHtml(s.customerFirst)} ${escapeHtml(s.customerLast)}</b></td><td>${s.items.map(i=>escapeHtml(i.name)+' ×'+i.qty).join(', ')}</td><td>${escapeHtml(s.paymentMethod)}</td><td><b>${s.total.toLocaleString('tr-TR')} ₺</b></td><td>${fmtDateTime(s.createdAt)}</td></tr>`).join('')}
+    </tbody></table></div>` : emptyState('🥤','Henüz içecek satışı bulunmuyor.')}
+  </div>`;
+}
+function updateDrinkSaleTotal(){
+  const el = document.getElementById('saleTotalVal');
+  if(el) el.textContent = computeSaleDrinksTotal().toLocaleString('tr-TR')+' ₺';
+}
+function wireDrinkSales(){
+  document.getElementById('saleDrinksSelector').addEventListener('click', function(e){
+    const btn = e.target.closest('.qty-btn');
+    if(!btn) return;
+    const id = btn.dataset.id;
+    const cur = selectedSaleDrinks[id] || 0;
+    const next = btn.dataset.act === 'plus' ? cur+1 : Math.max(0,cur-1);
+    if(next) selectedSaleDrinks[id] = next; else delete selectedSaleDrinks[id];
+    const qty = document.getElementById('sale_qtyval_'+id);
+    if(qty) qty.textContent = next;
+    updateDrinkSaleTotal();
+  });
+  document.getElementById('saveDrinkSaleBtn').addEventListener('click', saveDrinkSale);
+  updateDrinkSaleTotal();
+}
+async function saveDrinkSale(){
+  const first = document.getElementById('sale_customerFirst').value.trim();
+  const last = document.getElementById('sale_customerLast').value.trim();
+  const total = computeSaleDrinksTotal();
+  if(!first || !last){ toast('Lütfen müşterinin adını ve soyadını girin.','⚠️'); return; }
+  if(!total){ toast('Lütfen en az bir içecek seçin.','⚠️'); return; }
+  const items = Object.keys(selectedSaleDrinks).map(id=>{
+    const d = DRINKS_MENU.find(x=>x.id===id);
+    return {name:d.name, qty:selectedSaleDrinks[id], price:d.price, lineTotal:d.price*selectedSaleDrinks[id]};
+  });
+  DRINK_SALES.push({id:uid(), customerFirst:first, customerLast:last, items, total, paymentMethod:document.getElementById('sale_payment').value, createdAt:new Date().toISOString()});
+  await persistDrinkSales();
+  toast(first+' '+last+' için içecek satışı kaydedildi.','🥤');
+  renderView();
 }
 
 /* ===================== RECORDS / HISTORY / CUSTOMERS (search) ===================== */
@@ -1626,14 +1727,19 @@ function getPeriodRange(period){
 function recordsInRange(range){
   return RECORDS.filter(r=>{ const t = new Date(r.entryTime); return t>=range[0] && t<=range[1]; });
 }
+function drinkSalesInRange(range){
+  return DRINK_SALES.filter(s=>{ const t = new Date(s.createdAt); return t>=range[0] && t<=range[1]; });
+}
 function renderCashflow(){
   const range = getPeriodRange(cashflowPeriod);
   const list = recordsInRange(range).sort((a,b)=> new Date(b.entryTime)-new Date(a.entryTime));
-  const total = list.reduce((s,r)=> s+(r.amount||0), 0);
-  const cash = list.filter(r=>r.paymentMethod==='Nakit').reduce((s,r)=> s+(r.amount||0),0);
-  const card = list.filter(r=>r.paymentMethod==='Kart').reduce((s,r)=> s+(r.amount||0),0);
+  const drinkSales = drinkSalesInRange(range).sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
+  const total = list.reduce((s,r)=> s+(r.amount||0), 0) + drinkSales.reduce((s,r)=>s+(r.total||0),0);
+  const cash = list.filter(r=>r.paymentMethod==='Nakit').reduce((s,r)=> s+(r.amount||0),0) + drinkSales.filter(r=>r.paymentMethod==='Nakit').reduce((s,r)=>s+(r.total||0),0);
+  const card = list.filter(r=>r.paymentMethod==='Kart').reduce((s,r)=> s+(r.amount||0),0) + drinkSales.filter(r=>r.paymentMethod==='Kart').reduce((s,r)=>s+(r.total||0),0);
   const free = list.filter(r=>r.paymentMethod==='Ücretsiz').length;
-  const avg = list.length ? Math.round(total/list.length) : 0;
+  const transactionCount = list.length + drinkSales.length;
+  const avg = transactionCount ? Math.round(total/transactionCount) : 0;
 
   const periods = [['today','Bugün'],['week','Bu Hafta'],['month','Bu Ay'],['all','Tüm Zamanlar'],['custom','Özel Aralık']];
   const periodBtns = periods.map(([val,lbl])=> `<button type="button" class="duration-pill${cashflowPeriod===val?' selected':''}" data-period="${val}">${lbl}</button>`).join('');
@@ -1644,6 +1750,12 @@ function renderCashflow(){
     <td>${escapeHtml(r.motherName||r.fatherName||'—')}</td>
     <td><span class="badge ${r.paymentMethod==='Nakit'?'badge-green':(r.paymentMethod==='Kart'?'badge-gray':'badge-yellow')}">${r.paymentMethod||'Nakit'}</span></td>
     <td style="text-align:right; font-weight:800;">${(r.amount||0).toLocaleString('tr-TR')} ₺</td>
+  </tr>`).join('') + drinkSales.map(s=>`<tr>
+    <td>${fmtDateTime(s.createdAt)}</td>
+    <td><b>${escapeHtml(s.customerFirst)} ${escapeHtml(s.customerLast)}</b></td>
+    <td>İçecek müşterisi</td>
+    <td><span class="badge ${s.paymentMethod==='Nakit'?'badge-green':'badge-gray'}">${escapeHtml(s.paymentMethod)}</span></td>
+    <td style="text-align:right; font-weight:800;">${(s.total||0).toLocaleString('tr-TR')} ₺</td>
   </tr>`).join('');
 
   return `
@@ -1659,7 +1771,7 @@ function renderCashflow(){
     <div class="kpi-card good"><div class="kpi-label">Toplam Ciro</div><div class="kpi-value">${total.toLocaleString('tr-TR')} ₺</div></div>
     <div class="kpi-card"><div class="kpi-label">Nakit</div><div class="kpi-value">${cash.toLocaleString('tr-TR')} ₺</div></div>
     <div class="kpi-card"><div class="kpi-label">Kart</div><div class="kpi-value">${card.toLocaleString('tr-TR')} ₺</div></div>
-    <div class="kpi-card"><div class="kpi-label">İşlem Sayısı</div><div class="kpi-value">${list.length}</div></div>
+    <div class="kpi-card"><div class="kpi-label">İşlem Sayısı</div><div class="kpi-value">${transactionCount}</div></div>
     <div class="kpi-card"><div class="kpi-label">Ort. İşlem Tutarı</div><div class="kpi-value">${avg.toLocaleString('tr-TR')} ₺</div></div>
   </div>
   <div class="a-card">
@@ -1668,7 +1780,7 @@ function renderCashflow(){
       <button class="a-btn" style="background:var(--a-green-soft); color:var(--a-green);" id="exportExcel_cashflow">📊 Excel Olarak İndir</button>
       <button class="a-btn" style="background:var(--a-red-soft); color:var(--a-red);" id="exportPdf_cashflow">📄 PDF Olarak İndir</button>
     </div>
-    ${list.length ? `<div style="overflow-x:auto;"><table class="a-table"><thead><tr><th>Tarih/Saat</th><th>Çocuk</th><th>Veli</th><th>Ödeme</th><th style="text-align:right;">Tutar</th></tr></thead><tbody>${rows}</tbody></table></div>` : emptyState('💰','Bu dönemde işlem bulunmuyor.')}
+    ${transactionCount ? `<div style="overflow-x:auto;"><table class="a-table"><thead><tr><th>Tarih/Saat</th><th>Çocuk / Müşteri</th><th>Veli / Tür</th><th>Ödeme</th><th style="text-align:right;">Tutar</th></tr></thead><tbody>${rows}</tbody></table></div>` : emptyState('💰','Bu dönemde işlem bulunmuyor.')}
   </div>`;
 }
 function wireCashflow(){
@@ -1685,13 +1797,19 @@ function wireCashflow(){
   const excelBtn = document.getElementById('exportExcel_cashflow');
   const pdfBtn = document.getElementById('exportPdf_cashflow');
   if(excelBtn) excelBtn.addEventListener('click', function(){
-    const list = recordsInRange(getPeriodRange(cashflowPeriod));
-    const rows = list.map(r=>({ 'Tarih/Saat':fmtDateTime(r.entryTime), 'Çocuk':r.childFirstName+' '+r.childLastName, 'Veli':r.motherName||r.fatherName||'', 'Ödeme Yöntemi':r.paymentMethod||'Nakit', 'Tutar (₺)':r.amount||0 }));
+    const range = getPeriodRange(cashflowPeriod);
+    const list = recordsInRange(range);
+    const sales = drinkSalesInRange(range);
+    const rows = list.map(r=>({ 'Tarih/Saat':fmtDateTime(r.entryTime), 'Çocuk/Müşteri':r.childFirstName+' '+r.childLastName, 'Veli/Tür':r.motherName||r.fatherName||'Çocuk kaydı', 'Ödeme Yöntemi':r.paymentMethod||'Nakit', 'Tutar (₺)':r.amount||0 }))
+      .concat(sales.map(s=>({ 'Tarih/Saat':fmtDateTime(s.createdAt), 'Çocuk/Müşteri':s.customerFirst+' '+s.customerLast, 'Veli/Tür':'İçecek satışı', 'Ödeme Yöntemi':s.paymentMethod, 'Tutar (₺)':s.total||0 })));
     exportExcel('Ciro_Raporu', rows);
   });
   if(pdfBtn) pdfBtn.addEventListener('click', function(){
-    const list = recordsInRange(getPeriodRange(cashflowPeriod));
-    const rows = list.map(r=>[fmtDateTime(r.entryTime), r.childFirstName+' '+r.childLastName, r.paymentMethod||'Nakit', (r.amount||0)+' TL']);
+    const range = getPeriodRange(cashflowPeriod);
+    const list = recordsInRange(range);
+    const sales = drinkSalesInRange(range);
+    const rows = list.map(r=>[fmtDateTime(r.entryTime), r.childFirstName+' '+r.childLastName, r.paymentMethod||'Nakit', (r.amount||0)+' TL'])
+      .concat(sales.map(s=>[fmtDateTime(s.createdAt), s.customerFirst+' '+s.customerLast, s.paymentMethod, (s.total||0)+' TL']));
     exportPDF('Ciro Raporu', ['Tarih','Çocuk','Ödeme','Tutar'], rows);
   });
 }
@@ -1704,11 +1822,14 @@ function renderStats(){
   const periodRecords = statsPeriod==='custom'
     ? RECORDS.filter(r=>{ const t=new Date(r.entryTime); const s=statsCustomStart?new Date(statsCustomStart+'T00:00:00'):new Date(0); const e=statsCustomEnd?new Date(statsCustomEnd+'T23:59:59'):new Date(); return t>=s && t<=e; })
     : recordsInRange(range);
+  const periodDrinkSales = statsPeriod==='custom'
+    ? DRINK_SALES.filter(s=>{ const t=new Date(s.createdAt); const st=statsCustomStart?new Date(statsCustomStart+'T00:00:00'):new Date(0); const e=statsCustomEnd?new Date(statsCustomEnd+'T23:59:59'):new Date(); return t>=st && t<=e; })
+    : drinkSalesInRange(range);
 
   const periodCount = periodRecords.length;
   const completed = periodRecords.filter(r=>r.actualExitTime);
   const avgDur = completed.length ? Math.round(completed.reduce((s,r)=> s+minutesBetween(r.entryTime,r.actualExitTime),0)/completed.length) : 0;
-  const periodRevenue = periodRecords.reduce((s,r)=> s+(r.amount||0),0);
+  const periodRevenue = periodRecords.reduce((s,r)=> s+(r.amount||0),0) + periodDrinkSales.reduce((s,r)=>s+(r.total||0),0);
 
   const hourCounts = new Array(24).fill(0);
   periodRecords.forEach(r=> hourCounts[new Date(r.entryTime).getHours()]++ );
