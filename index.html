@@ -1393,12 +1393,8 @@ function renderDrinkSales(){
   const rows = [...DRINK_SALES].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,20);
   return `
   <div class="a-card" style="max-width:760px;">
-    <h3>Çocuk Eğlence Hizmeti Almayan Müşteri İçin İçecek Satışı</h3>
-    <p style="font-size:0.85rem; color:var(--a-text-soft); margin-bottom:18px;">Müşterinin adını ve soyadını alın, istediği içecekleri seçin.</p>
-    <div class="form-grid">
-      <div class="field"><label>Müşteri Adı *</label><input id="sale_customerFirst" type="text" placeholder="Örn: Ayşe"></div>
-      <div class="field"><label>Müşteri Soyadı *</label><input id="sale_customerLast" type="text" placeholder="Örn: Yılmaz"></div>
-    </div>
+    <h3>Çocuk Eğlence Hizmeti Almayanlar İçin İçecek Satışı</h3>
+    <p style="font-size:0.85rem; color:var(--a-text-soft); margin-bottom:18px;">İçecekleri seçin ve satışı kaydedin.</p>
     <div class="form-section-title">İçecekler</div>
     <div id="saleDrinksSelector">${renderSaleDrinkCategories()}</div>
     <div class="drinks-total-box">
@@ -1415,7 +1411,7 @@ function renderDrinkSales(){
   <div class="a-card">
     <h3>Son İçecek Satışları</h3>
     ${rows.length ? `<div style="overflow-x:auto;"><table class="a-table"><thead><tr><th>Müşteri</th><th>İçecekler</th><th>Ödeme</th><th>Tutar</th><th>Tarih</th></tr></thead><tbody>
-      ${rows.map(s=>`<tr><td><b>${escapeHtml(s.customerFirst)} ${escapeHtml(s.customerLast)}</b></td><td>${s.items.map(i=>escapeHtml(i.name)+' ×'+i.qty).join(', ')}</td><td>${escapeHtml(s.paymentMethod)}</td><td><b>${s.total.toLocaleString('tr-TR')} ₺</b></td><td>${fmtDateTime(s.createdAt)}</td></tr>`).join('')}
+      ${rows.map(s=>`<tr><td><b>İsimsiz satış</b></td><td>${s.items.map(i=>escapeHtml(i.name)+' ×'+i.qty).join(', ')}</td><td>${escapeHtml(s.paymentMethod)}</td><td><b>${s.total.toLocaleString('tr-TR')} ₺</b></td><td>${fmtDateTime(s.createdAt)}</td></tr>`).join('')}
     </tbody></table></div>` : emptyState('🥤','Henüz içecek satışı bulunmuyor.')}
   </div>`;
 }
@@ -1439,18 +1435,15 @@ function wireDrinkSales(){
   updateDrinkSaleTotal();
 }
 async function saveDrinkSale(){
-  const first = document.getElementById('sale_customerFirst').value.trim();
-  const last = document.getElementById('sale_customerLast').value.trim();
   const total = computeSaleDrinksTotal();
-  if(!first || !last){ toast('Lütfen müşterinin adını ve soyadını girin.','⚠️'); return; }
   if(!total){ toast('Lütfen en az bir içecek seçin.','⚠️'); return; }
   const items = Object.keys(selectedSaleDrinks).map(id=>{
     const d = DRINKS_MENU.find(x=>x.id===id);
     return {name:d.name, qty:selectedSaleDrinks[id], price:d.price, lineTotal:d.price*selectedSaleDrinks[id]};
   });
-  DRINK_SALES.push({id:uid(), customerFirst:first, customerLast:last, items, total, paymentMethod:document.getElementById('sale_payment').value, createdAt:new Date().toISOString()});
+  DRINK_SALES.push({id:uid(), customerFirst:'', customerLast:'', items, total, paymentMethod:document.getElementById('sale_payment').value, createdAt:new Date().toISOString()});
   await persistDrinkSales();
-  toast(first+' '+last+' için içecek satışı kaydedildi.','🥤');
+  toast('İçecek satışı kaydedildi.','🥤');
   renderView();
 }
 
@@ -1752,7 +1745,7 @@ function renderCashflow(){
     <td style="text-align:right; font-weight:800;">${(r.amount||0).toLocaleString('tr-TR')} ₺</td>
   </tr>`).join('') + drinkSales.map(s=>`<tr>
     <td>${fmtDateTime(s.createdAt)}</td>
-    <td><b>${escapeHtml(s.customerFirst)} ${escapeHtml(s.customerLast)}</b></td>
+    <td><b>İsimsiz satış</b></td>
     <td>İçecek müşterisi</td>
     <td><span class="badge ${s.paymentMethod==='Nakit'?'badge-green':'badge-gray'}">${escapeHtml(s.paymentMethod)}</span></td>
     <td style="text-align:right; font-weight:800;">${(s.total||0).toLocaleString('tr-TR')} ₺</td>
@@ -1801,7 +1794,7 @@ function wireCashflow(){
     const list = recordsInRange(range);
     const sales = drinkSalesInRange(range);
     const rows = list.map(r=>({ 'Tarih/Saat':fmtDateTime(r.entryTime), 'Çocuk/Müşteri':r.childFirstName+' '+r.childLastName, 'Veli/Tür':r.motherName||r.fatherName||'Çocuk kaydı', 'Ödeme Yöntemi':r.paymentMethod||'Nakit', 'Tutar (₺)':r.amount||0 }))
-      .concat(sales.map(s=>({ 'Tarih/Saat':fmtDateTime(s.createdAt), 'Çocuk/Müşteri':s.customerFirst+' '+s.customerLast, 'Veli/Tür':'İçecek satışı', 'Ödeme Yöntemi':s.paymentMethod, 'Tutar (₺)':s.total||0 })));
+      .concat(sales.map(s=>({ 'Tarih/Saat':fmtDateTime(s.createdAt), 'Çocuk/Müşteri':'İsimsiz satış', 'Veli/Tür':'İçecek satışı', 'Ödeme Yöntemi':s.paymentMethod, 'Tutar (₺)':s.total||0 })));
     exportExcel('Ciro_Raporu', rows);
   });
   if(pdfBtn) pdfBtn.addEventListener('click', function(){
@@ -1809,7 +1802,7 @@ function wireCashflow(){
     const list = recordsInRange(range);
     const sales = drinkSalesInRange(range);
     const rows = list.map(r=>[fmtDateTime(r.entryTime), r.childFirstName+' '+r.childLastName, r.paymentMethod||'Nakit', (r.amount||0)+' TL'])
-      .concat(sales.map(s=>[fmtDateTime(s.createdAt), s.customerFirst+' '+s.customerLast, s.paymentMethod, (s.total||0)+' TL']));
+      .concat(sales.map(s=>[fmtDateTime(s.createdAt), 'İsimsiz satış', s.paymentMethod, (s.total||0)+' TL']));
     exportPDF('Ciro Raporu', ['Tarih','Çocuk','Ödeme','Tutar'], rows);
   });
 }
