@@ -480,38 +480,8 @@ img,svg{display:block;}
         <h2>Siz Kahvenizi Yudumlarken, Onlar Eğlensin</h2>
         <p>Çocuklar oyun alanında eğlenirken siz de kafemizde sıcak veya soğuk bir içeceğin, waffle ve milkshake'in tadını çıkarabilirsiniz.</p>
       </div>
-      <div class="menu-grid">
-        <div class="menu-card">
-          <span class="menu-cat-badge" style="background:linear-gradient(135deg,#B9793F,#8A5A2B);">🔥 Sıcak İçecekler</span>
-          <div class="menu-items">
-            <div class="menu-item"><span class="menu-item-name">Türk Kahvesi</span><span class="menu-item-price">60 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Süvari Türk Kahvesi</span><span class="menu-item-price">75 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Çay</span><span class="menu-item-price">10 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Espresso<span class="menu-item-note">(Sıcak / Soğuk)</span></span><span class="menu-item-price">75 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Latte</span><span class="menu-item-price">100 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Cappuccino<span class="menu-item-note">(Sıcak / Soğuk)</span></span><span class="menu-item-price">100 ₺</span></div>
-          </div>
-        </div>
-        <div class="menu-card">
-          <span class="menu-cat-badge" style="background:linear-gradient(135deg,var(--turquoise),var(--turquoise-dark));">🧊 Soğuk İçecekler</span>
-          <div class="menu-items">
-            <div class="menu-item"><span class="menu-item-name">Su</span><span class="menu-item-price">10 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Soda</span><span class="menu-item-price">20 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Meyveli Soda</span><span class="menu-item-price">25 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Meyve Suyu</span><span class="menu-item-price">25 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Capri-Sun</span><span class="menu-item-price">25 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Link</span><span class="menu-item-price">25 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Kutu Kola</span><span class="menu-item-price">50 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Fuse Tea</span><span class="menu-item-price">50 ₺</span></div>
-          </div>
-        </div>
-        <div class="menu-card wide">
-          <span class="menu-cat-badge" style="background:linear-gradient(135deg,var(--bubblegum),#FF6BAE);">🧇 Tatlı &amp; Özel İçecekler</span>
-          <div class="menu-items menu-items-2col">
-            <div class="menu-item"><span class="menu-item-name">Waffle</span><span class="menu-item-price">175 ₺</span></div>
-            <div class="menu-item"><span class="menu-item-name">Milkshake<span class="menu-item-note">(Çikolata · Çilek · Muz)</span></span><span class="menu-item-price">150 ₺</span></div>
-          </div>
-        </div>
+      <div class="menu-grid" id="publicMenuGrid">
+        <p style="text-align:center; color:var(--indigo-soft);">Menü yükleniyor…</p>
       </div>
       <p style="text-align:center; margin-top:28px; color:var(--indigo-soft); font-weight:700;">🎈 Çocuklar eğlenirken, siz de kahvenizin tadını çıkarın...</p>
     </div>
@@ -532,6 +502,7 @@ img,svg{display:block;}
         <div class="g-tile"><img src="assets/gallery/vadi-kopru.jpg" alt="Renkli köprü oyun ekipmanı"></div>
         <div class="g-tile"><img src="assets/gallery/vadi-5.jpg" alt="Lego oyun masası"></div>
         <div class="g-tile"><img src="assets/gallery/vadi-6.jpg" alt="Eğitici oyun masası ve sandalyeler"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-7.jpg" alt="Tırmanma tutamaçlı duvar ve top havuzu"></div>
       </div>
     </div>
   </section>
@@ -634,7 +605,7 @@ img,svg{display:block;}
         <button class="a-menu-item" data-view="records"><span class="ic">📋</span>Tüm Kayıtlar</button>
         <button class="a-menu-item" data-view="history"><span class="ic">🕓</span>Geçmiş İşlemler</button>
         <button class="a-menu-item" data-view="customers"><span class="ic">👨‍👩‍👧</span>Müşteriler</button>
-        <button class="a-menu-item" data-view="drinkSales"><span class="ic">🥤</span>İçecek Satış</button>
+        <button class="a-menu-item" data-view="drinkSales"><span class="ic">🍽️</span>Yiyecek / İçecek Satış</button>
         <button class="a-menu-item" data-view="cashflow"><span class="ic">💰</span>Ciro</button>
         <button class="a-menu-item" data-view="stats"><span class="ic">📈</span>Raporlar</button>
         <button class="a-menu-item" data-view="settings"><span class="ic">⚙️</span>Ayarlar</button>
@@ -707,48 +678,85 @@ const DEFAULT_SETTINGS = {
   adminPass:'Arel1645..'
 };
 
-/* Kafe / meşrubat menüsü — yeni kayıt formunda seçilip fiyata otomatik eklenir */
-const DRINKS_MENU = [
-  {id:'turk_kahve',  name:'Türk Kahvesi',                 price:60,  cat:'Sıcak İçecekler'},
-  {id:'suvari_kahve',name:'Süvari Türk Kahvesi',            price:75,  cat:'Sıcak İçecekler'},
-  {id:'cay',         name:'Çay',                           price:10,  cat:'Sıcak İçecekler'},
-  {id:'espresso',    name:'Espresso (Sıcak / Soğuk)',      price:75,  cat:'Sıcak İçecekler'},
-  {id:'latte',       name:'Latte',                         price:100, cat:'Sıcak İçecekler'},
-  {id:'cappuccino',  name:'Cappuccino (Sıcak / Soğuk)',    price:100, cat:'Sıcak İçecekler'},
-  {id:'su',          name:'Su',                            price:10,  cat:'Soğuk İçecekler'},
-  {id:'soda',        name:'Soda',                          price:20,  cat:'Soğuk İçecekler'},
-  {id:'meyveli_soda',name:'Meyveli Soda',                   price:25,  cat:'Soğuk İçecekler'},
-  {id:'meyve_suyu',  name:'Meyve Suyu',                    price:25,  cat:'Soğuk İçecekler'},
-  {id:'capri_sun',   name:'Capri-Sun',                     price:25,  cat:'Soğuk İçecekler'},
-  {id:'link',        name:'Link',                          price:25,  cat:'Soğuk İçecekler'},
-  {id:'kutu_kola',   name:'Kutu Kola',                      price:50,  cat:'Soğuk İçecekler'},
-  {id:'fuse_tea',    name:'Fuse Tea',                      price:50,  cat:'Soğuk İçecekler'},
-  {id:'waffle',      name:'Waffle',                        price:175, cat:'Tatlı & Özel İçecekler'},
-  {id:'milkshake',   name:'Milkshake (Çikolata / Çilek / Muz)', price:150, cat:'Tatlı & Özel İçecekler'}
+/* Yiyecek / İçecek ürün kataloğu — merkezi veri kaynağı.
+   Menü, Yiyecek/İçecek Satış ve Yeni Kayıt (çocuk girişi) bölümleri buradan beslenir.
+   "cat" alanı sadece görsel gruplama içindir; ürünün gerçek türü "type" alanıdır (Yiyecek / İçecek). */
+const DEFAULT_PRODUCTS = [
+  {id:'turk_kahve',  name:'Türk Kahvesi',                 price:60,  type:'İçecek', cat:'Sıcak İçecekler'},
+  {id:'suvari_kahve',name:'Süvari Türk Kahvesi',            price:75,  type:'İçecek', cat:'Sıcak İçecekler'},
+  {id:'cay',         name:'Çay',                           price:10,  type:'İçecek', cat:'Sıcak İçecekler'},
+  {id:'espresso',    name:'Espresso (Sıcak / Soğuk)',      price:75,  type:'İçecek', cat:'Sıcak İçecekler'},
+  {id:'latte',       name:'Latte',                         price:100, type:'İçecek', cat:'Sıcak İçecekler'},
+  {id:'cappuccino',  name:'Cappuccino (Sıcak / Soğuk)',    price:100, type:'İçecek', cat:'Sıcak İçecekler'},
+  {id:'su',          name:'Su',                            price:10,  type:'İçecek', cat:'Soğuk İçecekler'},
+  {id:'soda',        name:'Soda',                          price:20,  type:'İçecek', cat:'Soğuk İçecekler'},
+  {id:'meyveli_soda',name:'Meyveli Soda',                   price:25,  type:'İçecek', cat:'Soğuk İçecekler'},
+  {id:'meyve_suyu',  name:'Meyve Suyu',                    price:25,  type:'İçecek', cat:'Soğuk İçecekler'},
+  {id:'capri_sun',   name:'Capri-Sun',                     price:25,  type:'İçecek', cat:'Soğuk İçecekler'},
+  {id:'link',        name:'Link',                          price:25,  type:'İçecek', cat:'Soğuk İçecekler'},
+  {id:'kutu_kola',   name:'Kutu Kola',                      price:50,  type:'İçecek', cat:'Soğuk İçecekler'},
+  {id:'fuse_tea',    name:'Fuse Tea',                      price:50,  type:'İçecek', cat:'Soğuk İçecekler'},
+  {id:'waffle',      name:'Waffle',                        price:175, type:'Yiyecek', cat:'Tatlı & Özel İçecekler'},
+  {id:'milkshake',   name:'Milkshake (Çikolata / Çilek / Muz)', price:150, type:'İçecek', cat:'Tatlı & Özel İçecekler'}
 ];
 
 let RECORDS = [];      // all check-in records (active + history)
-let DRINK_SALES = [];  // child-play-area-independent drink sales
+let PRODUCTS = [];     // merkezi yiyecek/içecek ürün kataloğu
+let OPEN_SALES = [];   // henüz "Satıldı" ile tamamlanmamış açık satış kayıtları
+let DRINK_SALES = [];  // tamamlanmış (Satıldı) yiyecek/içecek satışları — geçmiş
 let SETTINGS = { ...DEFAULT_SETTINGS };
 let loggedIn = false;
 let currentView = 'dashboard';
 let selectedDurationMinutes = 120;
-let selectedDrinks = {}; // { drinkId: adet } — yeni kayıt formunda seçilen içecek/atıştırmalıklar
-let selectedSaleDrinks = {};
+let selectedDrinks = {}; // { productId: adet } — yeni kayıt formunda seçilen içecek/atıştırmalıklar
 
 /* ===================== INIT / LOAD ===================== */
 async function loadAll(){
   const recRaw = await dbGet('zipzip:records', true);
   RECORDS = recRaw ? JSON.parse(recRaw) : [];
+  const prodRaw = await dbGet('zipzip:products', true);
+  PRODUCTS = prodRaw ? JSON.parse(prodRaw) : DEFAULT_PRODUCTS.map(p=>({...p}));
+  const openRaw = await dbGet('zipzip:open-sales', true);
+  OPEN_SALES = openRaw ? JSON.parse(openRaw) : [];
   const salesRaw = await dbGet('zipzip:drink-sales', true);
   DRINK_SALES = salesRaw ? JSON.parse(salesRaw) : [];
   const setRaw = await dbGet('zipzip:settings', true);
   SETTINGS = setRaw ? { ...DEFAULT_SETTINGS, ...JSON.parse(setRaw) } : { ...DEFAULT_SETTINGS };
   applyPublicSettings();
+  renderPublicMenu();
 }
 async function persistRecords(){ await dbSet('zipzip:records', JSON.stringify(RECORDS), true); }
+async function persistProducts(){ await dbSet('zipzip:products', JSON.stringify(PRODUCTS), true); }
+async function persistOpenSales(){ await dbSet('zipzip:open-sales', JSON.stringify(OPEN_SALES), true); }
 async function persistDrinkSales(){ await dbSet('zipzip:drink-sales', JSON.stringify(DRINK_SALES), true); }
 async function persistSettings(){ await dbSet('zipzip:settings', JSON.stringify(SETTINGS), true); }
+
+/* Ana sayfadaki "Menü" bölümünü PRODUCTS kataloğundan dinamik olarak oluşturur.
+   Bir ürün eklendiğinde/düzenlendiğinde/silindiğinde bu fonksiyon tekrar çağrılır. */
+function renderPublicMenu(){
+  const grid = document.getElementById('publicMenuGrid');
+  if(!grid) return;
+  if(!PRODUCTS.length){ grid.innerHTML = `<p style="text-align:center; color:var(--indigo-soft);">Henüz menüye eklenmiş bir ürün yok.</p>`; return; }
+  const catBadgeColors = {
+    'Sıcak İçecekler':'linear-gradient(135deg,#B9793F,#8A5A2B)',
+    'Soğuk İçecekler':'linear-gradient(135deg,var(--turquoise),var(--turquoise-dark))',
+    'Tatlı & Özel İçecekler':'linear-gradient(135deg,var(--bubblegum),#FF6BAE)',
+    'Yiyecekler':'linear-gradient(135deg,#B9793F,#8A5A2B)',
+    'İçecekler':'linear-gradient(135deg,var(--turquoise),var(--turquoise-dark))'
+  };
+  const cats = [...new Set(PRODUCTS.map(p=> p.cat || (p.type==='Yiyecek' ? 'Yiyecekler' : 'İçecekler')))];
+  grid.innerHTML = cats.map(cat=>{
+    const items = PRODUCTS.filter(p=> (p.cat || (p.type==='Yiyecek' ? 'Yiyecekler' : 'İçecekler')) === cat);
+    const badge = catBadgeColors[cat] || 'linear-gradient(135deg,var(--indigo),var(--indigo-soft))';
+    const icon = /tatlı|özel/i.test(cat) ? '🧇' : (/soğuk/i.test(cat) ? '🧊' : (/sıcak/i.test(cat) ? '🔥' : (/yiyecek/i.test(cat) ? '🍽️' : '🥤')));
+    return `<div class="menu-card">
+      <span class="menu-cat-badge" style="background:${badge};">${icon} ${escapeHtml(cat)}</span>
+      <div class="menu-items">
+        ${items.map(p=>`<div class="menu-item"><span class="menu-item-name">${escapeHtml(p.name)}<span class="menu-item-note">(${p.type})</span></span><span class="menu-item-price">${p.price.toLocaleString('tr-TR')} ₺</span></div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
 
 function applyPublicSettings(){
   const map = {'pub-phone':SETTINGS.phone,'pub-whatsapp':SETTINGS.whatsapp,'pub-address':SETTINGS.address,'pub-hours':SETTINGS.hours,'pub-address-2':SETTINGS.address};
@@ -1067,7 +1075,7 @@ document.getElementById('sidebarToggle').addEventListener('click', function(){
 /* ===================== MENU / VIEW SWITCH ===================== */
 const VIEW_TITLES = {
   dashboard:'Dashboard', active:'Aktif Çocuklar', new:'Yeni Kayıt', records:'Tüm Kayıtlar',
-  history:'Geçmiş İşlemler', customers:'Müşteriler', drinkSales:'İçecek Satış', cashflow:'Ciro', stats:'Raporlar', settings:'Ayarlar'
+  history:'Geçmiş İşlemler', customers:'Müşteriler', drinkSales:'Yiyecek / İçecek Satış', cashflow:'Ciro', stats:'Raporlar', settings:'Ayarlar'
 };
 document.getElementById('adminMenu').addEventListener('click', function(e){
   const btn = e.target.closest('.a-menu-item');
@@ -1172,9 +1180,9 @@ function renderDrinkRow(d){
   </div>`;
 }
 function renderDrinkCategories(){
-  const cats = [...new Set(DRINKS_MENU.map(d=>d.cat))];
+  const cats = [...new Set(PRODUCTS.map(d=>d.cat))];
   return cats.map(cat=>{
-    const items = DRINKS_MENU.filter(d=>d.cat===cat);
+    const items = PRODUCTS.filter(d=>d.cat===cat);
     return `<div class="drink-cat-title">${cat}</div>${items.map(renderDrinkRow).join('')}`;
   }).join('');
 }
@@ -1296,7 +1304,7 @@ function updateCalc(){
 }
 function computeDrinksTotal(){
   return Object.keys(selectedDrinks).reduce((sum,id)=>{
-    const d = DRINKS_MENU.find(x=>x.id===id);
+    const d = PRODUCTS.find(x=>x.id===id);
     return sum + (d ? d.price * selectedDrinks[id] : 0);
   }, 0);
 }
@@ -1321,7 +1329,7 @@ async function saveNewRecord(){
   const entryFee = parseFloat(document.getElementById('f_amount').value) || 0;
   const drinksTotal = computeDrinksTotal();
   const drinks = Object.keys(selectedDrinks).filter(id=>selectedDrinks[id]>0).map(id=>{
-    const d = DRINKS_MENU.find(x=>x.id===id);
+    const d = PRODUCTS.find(x=>x.id===id);
     return { name:d.name, qty:selectedDrinks[id], price:d.price, lineTotal:d.price*selectedDrinks[id] };
   });
 
@@ -1358,91 +1366,258 @@ async function saveNewRecord(){
   setView('active');
 }
 
-/* ===================== İÇECEK SATIŞ ===================== */
-function renderSaleDrinkRow(d){
-  const qty = selectedSaleDrinks[d.id] || 0;
-  return `<div class="drink-row" data-drink="${d.id}">
-    <div class="drink-info"><span class="drink-name">${escapeHtml(d.name)}</span><span class="drink-price">${d.price} ₺ / adet</span></div>
-    <div class="drink-qty-ctrl">
-      <button type="button" class="qty-btn" data-act="minus" data-id="${d.id}">−</button>
-      <span class="qty-val" id="sale_qtyval_${d.id}">${qty}</span>
-      <button type="button" class="qty-btn" data-act="plus" data-id="${d.id}">+</button>
+/* ===================== YİYECEK / İÇECEK SATIŞ ===================== */
+/* Açık satış: "Satıldı" butonuna basılana kadar dilediği gibi düzenlenebilen satış kaydı.
+   Tamamlandığında DRINK_SALES (satış geçmişi) içine taşınır ve OPEN_SALES'ten kaldırılır. */
+function findOpenSale(saleId){ return OPEN_SALES.find(s=>s.id===saleId); }
+function openSaleTotal(sale){ return sale.items.reduce((sum,i)=> sum + (Number(i.price)||0) * (Number(i.qty)||0), 0); }
+
+async function createOpenSale(){
+  OPEN_SALES.push({ id:uid(), items:[], paymentMethod:'Nakit', createdAt:new Date().toISOString() });
+  await persistOpenSales();
+  renderView();
+}
+async function discardOpenSale(saleId){
+  if(!confirm('Bu açık satışı iptal etmek istiyor musunuz? Eklenen ürünler kaydedilmeyecek.')) return;
+  OPEN_SALES = OPEN_SALES.filter(s=>s.id!==saleId);
+  await persistOpenSales();
+  toast('Açık satış iptal edildi.','🗑️');
+  renderView();
+}
+async function addProductToOpenSale(saleId, productId){
+  const sale = findOpenSale(saleId); if(!sale || !productId) return;
+  const product = PRODUCTS.find(p=>p.id===productId); if(!product) return;
+  const existing = sale.items.find(i=>i.productId===productId);
+  if(existing) existing.qty += 1;
+  else sale.items.push({ productId:product.id, name:product.name, type:product.type, price:product.price, qty:1 });
+  await persistOpenSales();
+  renderView();
+}
+async function changeOpenSaleItemQty(saleId, productId, delta){
+  const sale = findOpenSale(saleId); if(!sale) return;
+  const item = sale.items.find(i=>i.productId===productId); if(!item) return;
+  item.qty += delta;
+  if(item.qty<=0) sale.items = sale.items.filter(i=>i.productId!==productId);
+  await persistOpenSales();
+  renderView();
+}
+async function removeOpenSaleItem(saleId, productId){
+  const sale = findOpenSale(saleId); if(!sale) return;
+  sale.items = sale.items.filter(i=>i.productId!==productId);
+  await persistOpenSales();
+  renderView();
+}
+async function setOpenSaleItemPrice(saleId, productId, val){
+  const sale = findOpenSale(saleId); if(!sale) return;
+  const item = sale.items.find(i=>i.productId===productId); if(!item) return;
+  const num = parseFloat(val);
+  if(!isNaN(num) && num>=0) item.price = num;
+  await persistOpenSales();
+  updateOpenSaleCardTotal(saleId);
+}
+async function setOpenSalePayment(saleId, val){
+  const sale = findOpenSale(saleId); if(!sale) return;
+  sale.paymentMethod = val;
+  await persistOpenSales();
+}
+function updateOpenSaleCardTotal(saleId){
+  const sale = findOpenSale(saleId); if(!sale) return;
+  const el = document.querySelector(`[data-sale-total="${saleId}"]`);
+  if(el) el.textContent = openSaleTotal(sale).toLocaleString('tr-TR')+' ₺';
+  document.querySelectorAll(`[data-line-total="${saleId}"]`).forEach(cell=>{
+    const pid = cell.dataset.item;
+    const item = sale.items.find(i=>i.productId===pid);
+    if(item) cell.textContent = (item.price*item.qty).toLocaleString('tr-TR')+' ₺';
+  });
+}
+async function completeOpenSale(saleId){
+  const sale = findOpenSale(saleId); if(!sale) return;
+  if(!sale.items.length){ toast('Lütfen en az bir ürün ekleyin.','⚠️'); return; }
+  const total = openSaleTotal(sale);
+  DRINK_SALES.push({
+    id: uid(),
+    items: sale.items.map(i=>({ name:i.name, type:i.type, qty:i.qty, price:i.price, lineTotal:i.price*i.qty })),
+    total,
+    paymentMethod: sale.paymentMethod || 'Nakit',
+    createdAt: new Date().toISOString()
+  });
+  OPEN_SALES = OPEN_SALES.filter(s=>s.id!==saleId);
+  await persistDrinkSales();
+  await persistOpenSales();
+  toast('Satış tamamlandı ve kaydedildi.','✅');
+  renderView();
+}
+
+function renderOpenSaleCard(sale){
+  const total = openSaleTotal(sale);
+  const itemsRows = sale.items.map(it=>`<tr>
+    <td><b>${escapeHtml(it.name)}</b> <span class="badge badge-gray">${escapeHtml(it.type||'')}</span></td>
+    <td><div class="drink-qty-ctrl">
+      <button type="button" class="qty-btn" data-act="dec" data-sale="${sale.id}" data-item="${it.productId}">−</button>
+      <span class="qty-val">${it.qty}</span>
+      <button type="button" class="qty-btn" data-act="inc" data-sale="${sale.id}" data-item="${it.productId}">+</button>
+    </div></td>
+    <td><input type="number" min="0" step="0.01" value="${it.price}" data-act="priceEdit" data-sale="${sale.id}" data-item="${it.productId}" style="width:90px; padding:8px;"></td>
+    <td data-line-total="${sale.id}" data-item="${it.productId}"><b>${(it.price*it.qty).toLocaleString('tr-TR')} ₺</b></td>
+    <td><button type="button" class="a-btn" style="padding:7px 11px; font-size:0.8rem; background:var(--a-red-soft); color:var(--a-red);" data-act="removeItem" data-sale="${sale.id}" data-item="${it.productId}">✕</button></td>
+  </tr>`).join('');
+  const productOptions = PRODUCTS.map(p=>`<option value="${p.id}">${escapeHtml(p.name)} — ${p.price.toLocaleString('tr-TR')} ₺ (${p.type})</option>`).join('');
+  return `<div class="a-card" data-sale-card="${sale.id}">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+      <h3 style="margin-bottom:0;">🧾 Açık Satış · ${fmtTime(sale.createdAt)}</h3>
+      <button type="button" class="a-btn" style="padding:8px 12px; font-size:0.8rem; background:var(--a-red-soft); color:var(--a-red);" data-act="discardSale" data-sale="${sale.id}">🗑️ Satışı İptal Et</button>
     </div>
+    <div class="field" style="margin-top:0; max-width:420px;">
+      <label>Ürün Ekle</label>
+      <select data-act="addProductSelect" data-sale="${sale.id}">
+        <option value="">Ürün seçin…</option>
+        ${productOptions}
+      </select>
+    </div>
+    <div style="margin-top:16px;">
+    ${sale.items.length ? `<div style="overflow-x:auto;"><table class="a-table"><thead><tr><th>Ürün</th><th>Adet</th><th>Fiyat</th><th>Ara Toplam</th><th></th></tr></thead><tbody>${itemsRows}</tbody></table></div>` : emptyState('🧾','Henüz ürün eklenmedi.')}
+    </div>
+    <div class="drinks-total-box">
+      <span>Toplam Tutar</span><span data-sale-total="${sale.id}">${total.toLocaleString('tr-TR')} ₺</span>
+    </div>
+    <div class="form-grid" style="margin-top:16px;">
+      <div class="field"><label>Ödeme Yöntemi</label>
+        <select data-act="paymentSelect" data-sale="${sale.id}">
+          <option value="Nakit" ${sale.paymentMethod==='Nakit'?'selected':''}>Nakit</option>
+          <option value="Kart" ${sale.paymentMethod==='Kart'?'selected':''}>Kart</option>
+        </select>
+      </div>
+    </div>
+    <button type="button" class="a-btn a-btn-primary" style="width:auto; margin-top:18px;" data-act="completeSale" data-sale="${sale.id}" ${sale.items.length? '' : 'disabled'}>✅ Satıldı</button>
   </div>`;
 }
-function renderSaleDrinkCategories(){
-  const cats = [...new Set(DRINKS_MENU.map(d=>d.cat))];
-  return cats.map(cat=>{
-    const items = DRINKS_MENU.filter(d=>d.cat===cat);
-    return `<div class="drink-cat-title">${cat}</div>${items.map(renderSaleDrinkRow).join('')}`;
-  }).join('');
+
+function renderProductManage(){
+  const rows = PRODUCTS.map(p=>`<tr>
+    <td><b>${escapeHtml(p.name)}</b></td>
+    <td><span class="badge ${p.type==='Yiyecek'?'badge-yellow':'badge-green'}">${escapeHtml(p.type)}</span></td>
+    <td>${p.price.toLocaleString('tr-TR')} ₺</td>
+    <td>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" class="a-btn" style="padding:7px 12px; font-size:0.8rem;" data-act="editProduct" data-id="${p.id}">✏️ Düzenle</button>
+        <button type="button" class="a-btn" style="padding:7px 12px; font-size:0.8rem; background:var(--a-red-soft); color:var(--a-red);" data-act="deleteProduct" data-id="${p.id}">🗑️ Sil</button>
+      </div>
+    </td>
+  </tr>`).join('');
+  return `<div class="a-card" id="productManageCard">
+    <h3>Ürünleri Düzenle</h3>
+    <p style="font-size:0.85rem; color:var(--a-text-soft); margin-bottom:16px;">Buradaki değişiklikler Menü, Yiyecek/İçecek Satış ve Yeni Kayıt bölümlerine anında yansır.</p>
+    ${PRODUCTS.length ? `<div style="overflow-x:auto;"><table class="a-table"><thead><tr><th>Ürün Adı</th><th>Tür</th><th>Fiyat</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>` : emptyState('🍽️','Henüz ürün eklenmedi.')}
+    <button type="button" class="a-btn a-btn-primary" style="width:auto; margin-top:16px;" id="addProductBtn">➕ Yeni Yiyecek / İçecek Ekle</button>
+  </div>`;
 }
-function computeSaleDrinksTotal(){
-  return Object.keys(selectedSaleDrinks).reduce((sum,id)=>{
-    const d = DRINKS_MENU.find(x=>x.id===id);
-    return sum + (d ? d.price * selectedSaleDrinks[id] : 0);
-  }, 0);
+
+function openProductModal(product){
+  const isEdit = !!product;
+  const root = document.getElementById('modalRoot');
+  root.innerHTML = `<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <button class="modal-close" id="modalCloseBtn">✕</button>
+      <h3>${isEdit? 'Ürünü Düzenle' : 'Yeni Ürün Ekle'}</h3>
+      <div class="field" style="margin-top:14px;"><label>Ürün Adı</label><input type="text" id="pm_name" value="${isEdit? escapeHtml(product.name) : ''}" placeholder="Örn. Ayran"></div>
+      <div class="field"><label>Ürün Türü</label>
+        <select id="pm_type">
+          <option value="İçecek" ${isEdit && product.type==='İçecek' ? 'selected':''}>İçecek</option>
+          <option value="Yiyecek" ${isEdit && product.type==='Yiyecek' ? 'selected':''}>Yiyecek</option>
+        </select>
+      </div>
+      <div class="field"><label>Fiyat (₺)</label><input type="number" min="0" step="0.01" id="pm_price" value="${isEdit? product.price : ''}" placeholder="Örn. 40"></div>
+      <button class="a-btn a-btn-primary" id="pm_saveBtn">${isEdit? 'Kaydet' : 'Ürünü Ekle'}</button>
+      ${isEdit ? `<button class="a-btn" style="width:100%; margin-top:10px; background:var(--a-red-soft); color:var(--a-red);" id="pm_deleteBtn">🗑️ Ürünü Sil</button>` : ''}
+    </div>
+  </div>`;
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+  document.getElementById('modalOverlay').addEventListener('click', function(e){ if(e.target.id==='modalOverlay') closeModal(); });
+  document.getElementById('pm_saveBtn').addEventListener('click', async ()=>{
+    const name = document.getElementById('pm_name').value.trim();
+    const type = document.getElementById('pm_type').value;
+    const price = parseFloat(document.getElementById('pm_price').value);
+    if(!name){ toast('Lütfen ürün adını girin.','⚠️'); return; }
+    if(isNaN(price) || price<0){ toast('Lütfen geçerli bir fiyat girin.','⚠️'); return; }
+    if(isEdit){
+      product.name = name; product.type = type; product.price = price;
+    } else {
+      PRODUCTS.push({ id: uid(), name, type, price, cat: type==='Yiyecek' ? 'Yiyecekler' : 'İçecekler' });
+    }
+    await persistProducts();
+    closeModal();
+    toast(isEdit? 'Ürün güncellendi.' : 'Ürün eklendi.', '✅');
+    renderPublicMenu();
+    renderView();
+  });
+  const delBtn = document.getElementById('pm_deleteBtn');
+  if(delBtn) delBtn.addEventListener('click', ()=>{ closeModal(); deleteProduct(product.id); });
 }
+async function deleteProduct(id){
+  if(!confirm('Bu ürünü silmek istediğinize emin misiniz? Geçmiş satış kayıtları etkilenmez.')) return;
+  PRODUCTS = PRODUCTS.filter(p=>p.id!==id);
+  await persistProducts();
+  toast('Ürün silindi.','🗑️');
+  renderPublicMenu();
+  renderView();
+}
+
 function renderDrinkSales(){
-  selectedSaleDrinks = {};
   const today = new Date(); today.setHours(0,0,0,0);
   const todaySales = DRINK_SALES.filter(s=>new Date(s.createdAt)>=today);
   const todayTotal = todaySales.reduce((sum,s)=>sum+s.total,0);
   const rows = [...DRINK_SALES].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,20);
+  const openSalesSorted = [...OPEN_SALES].sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
   return `
-  <div class="a-card" style="max-width:760px;">
-    <h3>Çocuk Eğlence Hizmeti Almayanlar İçin İçecek Satışı</h3>
-    <p style="font-size:0.85rem; color:var(--a-text-soft); margin-bottom:18px;">İçecekleri seçin ve satışı kaydedin.</p>
-    <div class="form-section-title">İçecekler</div>
-    <div id="saleDrinksSelector">${renderSaleDrinkCategories()}</div>
-    <div class="drinks-total-box">
-      <span>Toplam Tutar</span><span id="saleTotalVal">0 ₺</span>
-    </div>
-    <div class="form-grid" style="margin-top:16px;">
-      <div class="field"><label>Ödeme Yöntemi</label><select id="sale_payment"><option value="Nakit">Nakit</option><option value="Kart">Kart</option></select></div>
-    </div>
-    <button class="a-btn a-btn-primary" style="width:auto; margin-top:18px;" id="saveDrinkSaleBtn">İçecek Satışını Kaydet</button>
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+    <h3 style="margin-bottom:0; font-family:'Inter'; font-size:1rem; font-weight:800;">Açık Satışlar</h3>
+    <button type="button" class="a-btn a-btn-primary" style="width:auto; margin-top:0;" id="newOpenSaleBtn">➕ Yeni Satış Başlat</button>
   </div>
-  <div class="kpi-grid" style="grid-template-columns:1fr; max-width:240px;">
-    <div class="kpi-card good"><div class="kpi-label">Bugünkü İçecek Satışı</div><div class="kpi-value">${todayTotal.toLocaleString('tr-TR')} ₺</div></div>
+  <div id="openSalesList">
+    ${openSalesSorted.length ? openSalesSorted.map(renderOpenSaleCard).join('') : `<div class="a-card">${emptyState('🧾','Şu anda açık satış yok. Yeni bir satış başlatın.')}</div>`}
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:1fr; max-width:280px;">
+    <div class="kpi-card good"><div class="kpi-label">Bugünkü Yiyecek / İçecek Satışı</div><div class="kpi-value">${todayTotal.toLocaleString('tr-TR')} ₺</div></div>
   </div>
   <div class="a-card">
-    <h3>Son İçecek Satışları</h3>
-    ${rows.length ? `<div style="overflow-x:auto;"><table class="a-table"><thead><tr><th>İçecekler</th><th>Ödeme</th><th>Tutar</th><th>Tarih</th></tr></thead><tbody>
+    <h3>Son Yiyecek / İçecek Satışları</h3>
+    ${rows.length ? `<div style="overflow-x:auto;"><table class="a-table"><thead><tr><th>Ürünler</th><th>Ödeme</th><th>Tutar</th><th>Tarih</th></tr></thead><tbody>
       ${rows.map(s=>`<tr><td>${s.items.map(i=>escapeHtml(i.name)+' ×'+i.qty).join(', ')}</td><td>${escapeHtml(s.paymentMethod)}</td><td><b>${s.total.toLocaleString('tr-TR')} ₺</b></td><td>${fmtDateTime(s.createdAt)}</td></tr>`).join('')}
-    </tbody></table></div>` : emptyState('🥤','Henüz içecek satışı bulunmuyor.')}
-  </div>`;
-}
-function updateDrinkSaleTotal(){
-  const el = document.getElementById('saleTotalVal');
-  if(el) el.textContent = computeSaleDrinksTotal().toLocaleString('tr-TR')+' ₺';
+    </tbody></table></div>` : emptyState('🍽️','Henüz yiyecek / içecek satışı bulunmuyor.')}
+  </div>
+  ${renderProductManage()}`;
 }
 function wireDrinkSales(){
-  document.getElementById('saleDrinksSelector').addEventListener('click', function(e){
-    const btn = e.target.closest('.qty-btn');
+  document.getElementById('newOpenSaleBtn').addEventListener('click', createOpenSale);
+
+  const list = document.getElementById('openSalesList');
+  list.addEventListener('click', function(e){
+    const btn = e.target.closest('button[data-act]');
     if(!btn) return;
-    const id = btn.dataset.id;
-    const cur = selectedSaleDrinks[id] || 0;
-    const next = btn.dataset.act === 'plus' ? cur+1 : Math.max(0,cur-1);
-    if(next) selectedSaleDrinks[id] = next; else delete selectedSaleDrinks[id];
-    const qty = document.getElementById('sale_qtyval_'+id);
-    if(qty) qty.textContent = next;
-    updateDrinkSaleTotal();
+    const saleId = btn.dataset.sale, act = btn.dataset.act;
+    if(act==='inc') changeOpenSaleItemQty(saleId, btn.dataset.item, 1);
+    else if(act==='dec') changeOpenSaleItemQty(saleId, btn.dataset.item, -1);
+    else if(act==='removeItem') removeOpenSaleItem(saleId, btn.dataset.item);
+    else if(act==='discardSale') discardOpenSale(saleId);
+    else if(act==='completeSale') completeOpenSale(saleId);
   });
-  document.getElementById('saveDrinkSaleBtn').addEventListener('click', saveDrinkSale);
-  updateDrinkSaleTotal();
-}
-async function saveDrinkSale(){
-  const total = computeSaleDrinksTotal();
-  if(!total){ toast('Lütfen en az bir içecek seçin.','⚠️'); return; }
-  const items = Object.keys(selectedSaleDrinks).map(id=>{
-    const d = DRINKS_MENU.find(x=>x.id===id);
-    return {name:d.name, qty:selectedSaleDrinks[id], price:d.price, lineTotal:d.price*selectedSaleDrinks[id]};
+  list.addEventListener('change', function(e){
+    const sel = e.target.closest('select[data-act="addProductSelect"]');
+    if(sel && sel.value){ addProductToOpenSale(sel.dataset.sale, sel.value); return; }
+    const paySel = e.target.closest('select[data-act="paymentSelect"]');
+    if(paySel){ setOpenSalePayment(paySel.dataset.sale, paySel.value); return; }
+    const priceInput = e.target.closest('input[data-act="priceEdit"]');
+    if(priceInput){ setOpenSaleItemPrice(priceInput.dataset.sale, priceInput.dataset.item, priceInput.value); }
   });
-  DRINK_SALES.push({id:uid(), customerFirst:'', customerLast:'', items, total, paymentMethod:document.getElementById('sale_payment').value, createdAt:new Date().toISOString()});
-  await persistDrinkSales();
-  toast('İçecek satışı kaydedildi.','🥤');
-  renderView();
+
+  const productCard = document.getElementById('productManageCard');
+  document.getElementById('addProductBtn').addEventListener('click', ()=> openProductModal(null));
+  productCard.addEventListener('click', function(e){
+    const btn = e.target.closest('button[data-act]');
+    if(!btn) return;
+    if(btn.dataset.act==='editProduct') openProductModal(PRODUCTS.find(p=>p.id===btn.dataset.id));
+    else if(btn.dataset.act==='deleteProduct') deleteProduct(btn.dataset.id);
+  });
 }
 
 /* ===================== RECORDS / HISTORY / CUSTOMERS (search) ===================== */
@@ -1468,6 +1643,7 @@ function filterRecords(list, term, dateVal){
 }
 function renderRecords(){
   const list = [...RECORDS].sort((a,b)=> new Date(b.entryTime)-new Date(a.entryTime));
+  const sales = [...DRINK_SALES].sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
   return `<div class="a-card"><h3>Tüm Kayıtlar (${list.length})</h3>
     ${renderSearchBar('records','Çocuk veya veli adına, telefona göre ara...')}
     <div style="display:flex; gap:8px; margin-bottom:14px;">
@@ -1475,6 +1651,11 @@ function renderRecords(){
       <button class="a-btn" style="background:var(--a-red-soft); color:var(--a-red);" id="exportPdf_records">📄 PDF Olarak İndir</button>
     </div>
     <div id="results_records">${list.length ? renderTable(list, true) : emptyState('📋','Henüz kayıt bulunmuyor.')}</div>
+  </div>
+  <div class="a-card"><h3>Tamamlanmış Yiyecek / İçecek Satışları (${sales.length})</h3>
+    ${sales.length ? `<div style="overflow-x:auto;"><table class="a-table"><thead><tr><th>Ürünler</th><th>Ödeme</th><th>Tutar</th><th>Tarih</th></tr></thead><tbody>
+      ${sales.map(s=>`<tr><td>${s.items.map(i=>escapeHtml(i.name)+' ×'+i.qty).join(', ')}</td><td>${escapeHtml(s.paymentMethod)}</td><td><b>${s.total.toLocaleString('tr-TR')} ₺</b></td><td>${fmtDateTime(s.createdAt)}</td></tr>`).join('')}
+    </tbody></table></div>` : emptyState('🍽️','Henüz tamamlanmış bir yiyecek / içecek satışı yok.')}
   </div>`;
 }
 function renderHistory(){
@@ -1744,7 +1925,7 @@ function renderCashflow(){
   </tr>`).join('') + drinkSales.map(s=>`<tr>
     <td>${fmtDateTime(s.createdAt)}</td>
     <td><b>İsimsiz satış</b></td>
-    <td>İçecek müşterisi</td>
+    <td>Yiyecek/İçecek müşterisi</td>
     <td><span class="badge ${s.paymentMethod==='Nakit'?'badge-green':'badge-gray'}">${escapeHtml(s.paymentMethod)}</span></td>
     <td style="text-align:right; font-weight:800;">${(s.total||0).toLocaleString('tr-TR')} ₺</td>
   </tr>`).join('');
@@ -1792,7 +1973,7 @@ function wireCashflow(){
     const list = recordsInRange(range);
     const sales = drinkSalesInRange(range);
     const rows = list.map(r=>({ 'Tarih/Saat':fmtDateTime(r.entryTime), 'Çocuk/Müşteri':r.childFirstName+' '+r.childLastName, 'Veli/Tür':r.motherName||r.fatherName||'Çocuk kaydı', 'Ödeme Yöntemi':r.paymentMethod||'Nakit', 'Tutar (₺)':r.amount||0 }))
-      .concat(sales.map(s=>({ 'Tarih/Saat':fmtDateTime(s.createdAt), 'Çocuk/Müşteri':'İsimsiz satış', 'Veli/Tür':'İçecek satışı', 'Ödeme Yöntemi':s.paymentMethod, 'Tutar (₺)':s.total||0 })));
+      .concat(sales.map(s=>({ 'Tarih/Saat':fmtDateTime(s.createdAt), 'Çocuk/Müşteri':'İsimsiz satış', 'Veli/Tür':'Yiyecek/İçecek satışı', 'Ödeme Yöntemi':s.paymentMethod, 'Tutar (₺)':s.total||0 })));
     exportExcel('Ciro_Raporu', rows);
   });
   if(pdfBtn) pdfBtn.addEventListener('click', function(){
@@ -1914,9 +2095,9 @@ function renderSettings(){
     <button class="a-btn a-btn-primary" style="width:auto; margin-top:18px;" id="saveAuthBtn">Giriş Bilgilerini Güncelle</button>
   </div>
   <div class="a-card" style="max-width:640px;">
-    <h3>İçecek Satışlarını Temizleme</h3>
-    <p style="font-size:0.85rem; color:var(--a-text-soft); margin-bottom:14px;">Son içecek satışlarının tamamını silebilirsiniz. Bu işlem ciro kayıtlarından da kaldırır.</p>
-    <button class="a-btn" style="background:var(--a-red-soft); color:var(--a-red);" id="cleanupDrinkSalesBtn">Son İçecek Satışlarını Sil</button>
+    <h3>Yiyecek / İçecek Satışlarını Temizleme</h3>
+    <p style="font-size:0.85rem; color:var(--a-text-soft); margin-bottom:14px;">Tamamlanmış yiyecek / içecek satışlarının tamamını silebilirsiniz. Bu işlem ciro kayıtlarından da kaldırır. Açık (henüz tamamlanmamış) satışlar bu işlemden etkilenmez.</p>
+    <button class="a-btn" style="background:var(--a-red-soft); color:var(--a-red);" id="cleanupDrinkSalesBtn">Tamamlanmış Satışları Sil</button>
   </div>
   <div class="a-card" style="max-width:640px;">
     <h3>Kayıt Temizliği</h3>
@@ -1950,12 +2131,12 @@ function wireSettings(){
     toast('Giriş bilgileri güncellendi.','🔒');
   });
   document.getElementById('cleanupDrinkSalesBtn').addEventListener('click', async function(){
-    if(!DRINK_SALES.length){ toast('Silinecek içecek satışı bulunmuyor.','⚠️'); return; }
-    if(!confirm('Tüm içecek satışları kalıcı olarak silinecek ve cirodan kaldırılacak. Onaylıyor musunuz?')) return;
+    if(!DRINK_SALES.length){ toast('Silinecek tamamlanmış satış bulunmuyor.','⚠️'); return; }
+    if(!confirm('Tüm tamamlanmış yiyecek / içecek satışları kalıcı olarak silinecek ve cirodan kaldırılacak. Onaylıyor musunuz?')) return;
     const count = DRINK_SALES.length;
     DRINK_SALES = [];
     await persistDrinkSales();
-    toast(count+' içecek satışı silindi.','🧹');
+    toast(count+' satış kaydı silindi.','🧹');
     renderView();
   });
 
