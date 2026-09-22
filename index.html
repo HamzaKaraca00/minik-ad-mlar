@@ -127,7 +127,7 @@ img,svg{display:block;}
 .feature-card p{font-size:0.88rem; color:var(--indigo-soft); line-height:1.5;}
 
 /* Play areas */
-.area-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
+.area-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:26px;}
 .area-card{background:#fff; border-radius:26px; overflow:hidden; border:1px solid var(--line); transition:transform .2s, box-shadow .2s;}
 .area-card:hover{transform:translateY(-6px); box-shadow:0 20px 34px -16px rgba(43,34,80,0.3);}
 .area-visual{height:170px; display:flex; align-items:center; justify-content:center; position:relative;}
@@ -136,9 +136,9 @@ img,svg{display:block;}
 .area-body p{font-size:0.92rem; color:var(--indigo-soft); line-height:1.55;}
 
 /* Gallery */
-.gallery-grid{display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:150px; gap:16px;}
-.gallery-grid > div:nth-child(3n+1){grid-row:span 2;}
-.g-tile{border-radius:20px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;}
+.gallery-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
+.g-tile{border-radius:20px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; aspect-ratio:1/1;}
+.g-tile img{width:100%; height:100%; object-fit:cover; display:block;}
 .g-tile svg{width:42%; height:42%; opacity:0.9;}
 
 /* Menu (Cafe) */
@@ -184,9 +184,14 @@ img,svg{display:block;}
   .hero h1{font-size:2.4rem;}
   .hero-art{max-width:340px; margin:0 auto;}
   .feature-grid{grid-template-columns:repeat(2,1fr);}
-  .area-grid{grid-template-columns:1fr;}
+  .area-grid{grid-template-columns:repeat(2,1fr);}
   .gallery-grid{grid-template-columns:repeat(2,1fr);}
   .contact-grid{grid-template-columns:1fr;}
+}
+
+@media (max-width: 560px){
+  .area-grid{grid-template-columns:1fr;}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);}
 }
 
 /* ============ ADMIN ============ */
@@ -464,18 +469,6 @@ img,svg{display:block;}
           </div>
           <div class="area-body"><h4>Eğlenceli Oyun Alanları</h4><p>Yaratıcı oyunlar, bulmacalar ve etkileşimli köşelerle dolu geniş alanlar.</p></div>
         </div>
-        <div class="area-card">
-          <div class="area-visual" style="background:linear-gradient(135deg,#FFD9EE,#FFF0F8);">
-            <svg width="90" height="90" viewBox="0 0 90 90"><path d="M45 20 L 51 36 L 68 36 L 54 47 L 59 64 L 45 53 L 31 64 L 36 47 L 22 36 L 39 36 Z" fill="var(--coral)"/></svg>
-          </div>
-          <div class="area-body"><h4>Doğum Günü Organizasyonları</h4><p>Özel temalı doğum günü partileri için hazır, süslenmiş kutlama alanları.</p></div>
-        </div>
-        <div class="area-card">
-          <div class="area-visual" style="background:linear-gradient(135deg,#D8E6FF,#EEF4FF);">
-            <svg width="90" height="90" viewBox="0 0 90 90"><rect x="20" y="25" width="50" height="35" rx="6" fill="var(--turquoise)" opacity="0.9"/><circle cx="35" cy="70" r="7" fill="var(--indigo)" opacity="0.4"/><circle cx="55" cy="70" r="7" fill="var(--indigo)" opacity="0.4"/></svg>
-          </div>
-          <div class="area-body"><h4>Bebek &amp; Minik Köşesi</h4><p>0-3 yaş arası minikler için ayrılmış, sakin ve yumuşak oyun bölgesi.</p></div>
-        </div>
       </div>
     </div>
   </section>
@@ -532,13 +525,13 @@ img,svg{display:block;}
         <p>Minik Adımlar Oyun Evi'nin renkli dünyasından bir kesit.</p>
       </div>
       <div class="gallery-grid">
-        <div class="g-tile"><img src="assets/gallery/vadi-1.jpg" alt="Trampolin ve boks torbaları" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="g-tile"><img src="assets/gallery/vadi-2.jpg" alt="Roller kaydırak ve top havuzu merdiveni" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="g-tile"><img src="assets/gallery/vadi-3.jpg" alt="Roller kaydırak" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="g-tile"><img src="assets/gallery/vadi-4.jpg" alt="Tırmanma duvarı ve top havuzu" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="g-tile"><img src="assets/gallery/vadi-kopru.jpg" alt="Renkli köprü oyun ekipmanı" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="g-tile"><img src="assets/gallery/vadi-5.jpg" alt="Lego oyun masası" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="g-tile"><img src="assets/gallery/vadi-6.jpg" alt="Eğitici oyun masası ve sandalyeler" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-1.jpg" alt="Trampolin ve boks torbaları"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-2.jpg" alt="Roller kaydırak ve top havuzu merdiveni"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-3.jpg" alt="Roller kaydırak"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-4.jpg" alt="Tırmanma duvarı ve top havuzu"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-kopru.jpg" alt="Renkli köprü oyun ekipmanı"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-5.jpg" alt="Lego oyun masası"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-6.jpg" alt="Eğitici oyun masası ve sandalyeler"></div>
       </div>
     </div>
   </section>
