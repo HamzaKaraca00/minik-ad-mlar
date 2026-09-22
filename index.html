@@ -492,6 +492,7 @@ img,svg{display:block;}
           <span class="menu-cat-badge" style="background:linear-gradient(135deg,#B9793F,#8A5A2B);">🔥 Sıcak İçecekler</span>
           <div class="menu-items">
             <div class="menu-item"><span class="menu-item-name">Türk Kahvesi</span><span class="menu-item-price">60 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Süvari Türk Kahvesi</span><span class="menu-item-price">75 ₺</span></div>
             <div class="menu-item"><span class="menu-item-name">Çay</span><span class="menu-item-price">10 ₺</span></div>
             <div class="menu-item"><span class="menu-item-name">Espresso<span class="menu-item-note">(Sıcak / Soğuk)</span></span><span class="menu-item-price">75 ₺</span></div>
             <div class="menu-item"><span class="menu-item-name">Latte</span><span class="menu-item-price">100 ₺</span></div>
@@ -503,6 +504,7 @@ img,svg{display:block;}
           <div class="menu-items">
             <div class="menu-item"><span class="menu-item-name">Su</span><span class="menu-item-price">10 ₺</span></div>
             <div class="menu-item"><span class="menu-item-name">Soda</span><span class="menu-item-price">20 ₺</span></div>
+            <div class="menu-item"><span class="menu-item-name">Meyveli Soda</span><span class="menu-item-price">25 ₺</span></div>
             <div class="menu-item"><span class="menu-item-name">Meyve Suyu</span><span class="menu-item-price">25 ₺</span></div>
             <div class="menu-item"><span class="menu-item-name">Capri-Sun</span><span class="menu-item-price">25 ₺</span></div>
             <div class="menu-item"><span class="menu-item-name">Link</span><span class="menu-item-price">25 ₺</span></div>
@@ -530,12 +532,13 @@ img,svg{display:block;}
         <p>Minik Adımlar Oyun Evi'nin renkli dünyasından bir kesit.</p>
       </div>
       <div class="gallery-grid">
-        <div class="g-tile" style="background:linear-gradient(160deg,#FF8F80,#FF6B5E);"><svg viewBox="0 0 90 90" fill="none"><circle cx="45" cy="45" r="34" fill="#fff" opacity="0.18"/><circle cx="30" cy="35" r="9" fill="#fff" opacity="0.5"/><circle cx="55" cy="55" r="12" fill="#fff" opacity="0.35"/></svg></div>
-        <div class="g-tile" style="background:linear-gradient(160deg,#3FD4C4,#1FB6A8);"><svg viewBox="0 0 90 90" fill="none"><rect x="20" y="20" width="50" height="50" rx="14" fill="#fff" opacity="0.2"/></svg></div>
-        <div class="g-tile" style="background:linear-gradient(160deg,#FFDA6B,#FFC93C);"><svg viewBox="0 0 90 90" fill="none"><polygon points="45,15 55,40 82,40 60,56 68,82 45,66 22,82 30,56 8,40 35,40" fill="#fff" opacity="0.3"/></svg></div>
-        <div class="g-tile" style="background:linear-gradient(160deg,#FFA6DA,#FF8FCB);"><svg viewBox="0 0 90 90" fill="none"><circle cx="30" cy="45" r="14" fill="#fff" opacity="0.3"/><circle cx="60" cy="45" r="14" fill="#fff" opacity="0.5"/></svg></div>
-        <div class="g-tile" style="background:linear-gradient(160deg,#7FA8FF,#5C86F5);"><svg viewBox="0 0 90 90" fill="none"><rect x="25" y="25" width="40" height="40" rx="20" fill="#fff" opacity="0.25"/></svg></div>
-        <div class="g-tile" style="background:linear-gradient(160deg,#FF6B5E,#E5493C);"><svg viewBox="0 0 90 90" fill="none"><circle cx="45" cy="45" r="30" fill="#fff" opacity="0.2"/></svg></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-1.jpg" alt="Trampolin ve boks torbaları" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-2.jpg" alt="Roller kaydırak ve top havuzu merdiveni" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-3.jpg" alt="Roller kaydırak" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-4.jpg" alt="Tırmanma duvarı ve top havuzu" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-kopru.jpg" alt="Renkli köprü oyun ekipmanı" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-5.jpg" alt="Lego oyun masası" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="g-tile"><img src="assets/gallery/vadi-6.jpg" alt="Eğitici oyun masası ve sandalyeler" style="width:100%;height:100%;object-fit:cover;"></div>
       </div>
     </div>
   </section>
@@ -714,12 +717,14 @@ const DEFAULT_SETTINGS = {
 /* Kafe / meşrubat menüsü — yeni kayıt formunda seçilip fiyata otomatik eklenir */
 const DRINKS_MENU = [
   {id:'turk_kahve',  name:'Türk Kahvesi',                 price:60,  cat:'Sıcak İçecekler'},
+  {id:'suvari_kahve',name:'Süvari Türk Kahvesi',            price:75,  cat:'Sıcak İçecekler'},
   {id:'cay',         name:'Çay',                           price:10,  cat:'Sıcak İçecekler'},
   {id:'espresso',    name:'Espresso (Sıcak / Soğuk)',      price:75,  cat:'Sıcak İçecekler'},
   {id:'latte',       name:'Latte',                         price:100, cat:'Sıcak İçecekler'},
   {id:'cappuccino',  name:'Cappuccino (Sıcak / Soğuk)',    price:100, cat:'Sıcak İçecekler'},
   {id:'su',          name:'Su',                            price:10,  cat:'Soğuk İçecekler'},
   {id:'soda',        name:'Soda',                          price:20,  cat:'Soğuk İçecekler'},
+  {id:'meyveli_soda',name:'Meyveli Soda',                   price:25,  cat:'Soğuk İçecekler'},
   {id:'meyve_suyu',  name:'Meyve Suyu',                    price:25,  cat:'Soğuk İçecekler'},
   {id:'capri_sun',   name:'Capri-Sun',                     price:25,  cat:'Soğuk İçecekler'},
   {id:'link',        name:'Link',                          price:25,  cat:'Soğuk İçecekler'},
